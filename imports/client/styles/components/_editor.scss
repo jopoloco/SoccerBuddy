@@ -1,0 +1,74 @@
+.editor {
+	background-color: white;
+	border: 1px solid $grey;
+	display: flex;
+	flex-direction: column;
+	flex-basis: 85%;
+	padding: $large-space;
+	width: 100%;
+}
+
+.editor-field {
+	width: 100%;
+	display: flex;
+}
+
+.editor-title {
+	border: none;
+	border-bottom: 2px solid $grey;
+	font-size: $large-font-size;
+	height: 6rem;
+	margin-bottom: $large-space;
+	overflow: hidden;
+	outline: none;
+	padding: $input-spacing;
+	resize: none;
+}
+
+.editor-body {
+	flex-grow: 1;
+	font-weight: 300;
+	margin-bottom: $large-space;
+	outline: none;
+	padding: $input-spacing;
+	resize: none;
+	// -webkit-overflow-scrolling: touch; // applies momentum scrolling
+}
+
+.editor-message {
+	text-align: center;
+	margin: $large-space;
+	font-style: italic;
+}
+
+.editor-button-div {
+	display: flex;
+}
+
+.editor-textfield-input {
+	font-size: $large-font-size;
+}
+
+.editor-title-input {
+	font-size: $large-font-size;
+}
+
+.editor-textfield-label {
+	font-size: $large-font-size;
+}
+
+.editor-title-label {
+	font-size: $large-font-size;
+}
+
+.editor-formcontrollabel-label {
+	font-size: $large-font-size;
+}
+
+.checkbox-checked {
+	color: green;
+}
+
+.chkecbox-unchecked {
+	color: red;
+}

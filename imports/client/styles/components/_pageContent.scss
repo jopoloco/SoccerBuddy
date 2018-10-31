@@ -1,0 +1,59 @@
+.pageContent {
+    display: flex;
+    height: $pageContent-height;
+    margin: 0 auto;
+    max-width: $site-max-width;
+
+    @include desktop() {
+        padding: $large-space $space;
+    }
+}
+
+.pageContent-sidebar-sub {
+    display: flex;
+    margin: 0 $space;
+    transition: left .3s ease;
+    width: 50vw;
+    padding: 1.4rem 0;
+
+    @include desktop() {
+        display: flex;
+        position: static;
+        width: $sidebar-width;
+        padding: 0;
+    }
+}
+
+.pageContent-sidebar {
+    background-color: white;
+    display: flex;
+    transition: left .3s ease;
+    width: 100vw; //viewport width
+
+    position: fixed;
+    top: $header-height;
+    left: -100vw;
+    // right: 0; using width
+    bottom: 0;
+
+    @include desktop() {
+        background-color: transparent;
+        display: flex;
+        position: static;
+        padding-right: $large-space;
+        width: $sidebar-width;
+    }
+}
+
+.navOpen .pageContent-sidebar {
+    left: 0;
+}
+
+.pageContent-main {
+    display: flex;
+    width: 100%;
+
+    @include desktop() {
+        width: $main-width;
+    }
+}

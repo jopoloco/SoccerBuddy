@@ -1,0 +1,28 @@
+install toolbelt.heroku.com
+command: heroku login
+
+// git config --global http.sslVerify false test
+
+create app:
+navigate to meteor app folder
+command: heroku create SampleName
+command: heroku buildpacks:set https://github.com/AdmitHub/meteor-buildpack-horse.git
+command: meteor node -v
+note this value
+open 'package.json'
+add section 
+"engines": {
+    "node": "8.11.1"
+}
+where version = version of node
+commit this change to git
+command: heroku addons:create mongolab:sandbox
+command: heroku config // ensure there is a mongo db listing
+command: heroku config:set ROOT_URL="site" // site is url. NO TRAILING SLASHES
+command: heroku config // ensure ROOT_URL listing
+command: git push heroku master
+
+
+to add to another workstation:
+command: heroku login
+command: heroku git:remote -a <My-App-Name>

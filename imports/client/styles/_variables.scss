@@ -1,0 +1,75 @@
+// colors
+$color-background: #f8f1e5; //bone
+$color-primary: #2f3131; //coal
+$color-secondary: #426e86; //steel blue
+$color-secondary-dark: shade($color-secondary, 50%);
+$color-highlight: #f9ba32; // sunshine
+$color-default: #333333;
+
+$brand-primary: #397ab1;
+$brand-secondary: #b17039;
+$brand-secondary-dark: $color-secondary-dark;
+
+// $grey: #dddddd;
+$grey: #aaaaaa;
+$light-grey: #f9f9f9;
+$dark-grey: #777777;
+
+// body
+$body-background-color: $color-background;
+$body-default-color: $color-default;
+$body-default-font-family: Helvetica, Arial, sans-serif;
+
+// spacing
+$small-space: 0.7rem;
+$space: 1.4rem;
+$large-space: 2.8rem;
+$site-max-width: 120rem;
+
+// font sizes
+$small-font-size: 1.5rem;
+$base-font-size: 2rem;
+$middle-font-size: 2.5rem;
+$large-font-size: 3rem;
+
+// form inputs
+$input-border: $grey;
+$input-spacing: 1rem;
+
+// boxedView
+$boxedView-overlay-bg: $grey;
+$boxedView-bg: white;
+$boxedView-border-color: $grey;
+
+// button
+$button-bg: $color-primary;
+$button-color: white;
+$button-pill-color: $color-primary;
+$button-secondary-bg: $light-grey;
+$button-secondary-color: $dark-grey;
+$button-secondary-border-color: $grey;
+
+// header
+$header-height: 6rem;
+
+// item
+$item-border-width: 4px;
+$item-image-min-height: 400px;
+
+$project-border-width: 8px;
+
+// project modal
+$project-modal-height: 350px;
+$project-modal-width: 550px;
+
+// confirm delete modal
+$delete-modal-height: 200px;
+$delete-modal-width: 550px;
+
+// page content
+$sidebar-width: 40rem;
+$main-width: calc(#{$site-max-width} - #{$sidebar-width});
+$pageContent-height: calc(
+	100vh - #{$header-height}
+); // vh is percent of veiwport
+$card-grid-min-width: 27.5rem;

@@ -1,0 +1,36 @@
+.searchResults {
+    align-items: center;
+    background-color: white;
+    border: 1px solid $grey;
+    display: flex;
+    flex-direction: column;
+    padding: $large-space;
+    width: 100%;
+}
+
+.results-title {
+    border: none;
+    border-bottom: 2px solid $grey;
+    font-size: $large-font-size;
+    height: 6rem;
+    margin-bottom: $large-space;
+    overflow: hidden;
+    outline: none;
+    padding: $input-spacing;
+    resize: none;
+}
+
+.results-body {
+    flex-grow: 1;
+    font-weight: 300;
+    margin-bottom: $large-space;
+    outline: none;
+    padding: $input-spacing;
+    resize: none;
+}
+
+.results-message {
+    text-align: center;
+    margin: $large-space;
+    font-style: italic;
+}

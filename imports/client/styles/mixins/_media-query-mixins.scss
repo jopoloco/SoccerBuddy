@@ -1,0 +1,19 @@
+@mixin desktop() {
+    @media (min-width: 50rem) {
+        @content;
+    }
+}
+
+@mixin singleColumn() {
+    @media (min-width: 68rem) {
+        @content;
+    }
+}
+
+@function tint($color, $percentage) {
+    @return mix(white, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+    @return mix(black, $color, $percentage);
+}

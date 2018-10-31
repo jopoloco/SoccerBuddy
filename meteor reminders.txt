@@ -1,0 +1,70 @@
+to create new meteor project:
+    - navigate to meteor folder
+    - clone boilerplate project using:
+        - git clone _____ "name" //name is the name of the folder to create
+    - remove old git code by running this in git bash: rm -rf .git
+    - run git status to ensure it worked
+    - run git init
+    - run git status to ensure it worked
+    - run git add .
+    - commit these changes
+    - create project on github with *project_name*
+    - copy commands for "push an existing repo" and run them
+
+
+to remover blaze:
+    - remove template from client/main.html
+    - replace body tag contents with a simple div tag with id="app"
+    - remove everything from client/main.js
+
+to get ready for react:
+    - command: meteor npm install
+    - command: meteor npm install react --save
+    - command: meteor npm install react-dom --save
+    - command: meteor npm install react-router --save
+    - command: meteor npm install react-router-dom --save
+    - command: meteor npm install simpl-schema --save
+    - command: meteor npm install moment --save
+    - command: meteor npm install react-modal --save
+    - command: meteor add accounts-password
+    - command: meteor add session
+    - command: meteor add fourseven:scss
+    - rename main.css in client to main.scss
+    - command: meteor add cultofcoders:mocha // test driver
+	- command: meteor npm install expect@1.20.2 --save-dev // NOTICE THE SAVE-DEV. makes it only required for dev work
+	- command: meteor npm install enzyme enzyme-adapter-react-16 react-addons-test-utils --save-dev // for react 16
+    - command: meteor npm install react-addons-pure-render-mixin --save
+    - command: meteor add react-meteor-data
+
+to publish:
+    - command: meteor remove autopublish // this removes the component that pushes the entire database to each client (yikes!)
+    - command: meteor remove insecure // this removes the component that allows the client to modify the database
+
+mongo:
+    - command: meteor mongo // brings up a terminal for the database
+    - command: db.collection.find() // returns all entries in 'collection'
+    - command: db.collection.remove({}) // empties out 'collection'
+    - command: db.collection.update({id: ID}, {$set: {example: data}}) 
+        // updates all entries in collection with 'id' equal to 'ID' by 
+            setting 'example' field to value 'data'
+    - command: db.collection.updateMany({}, {$set: {example: data}})
+    - $inc: {example: val} // adjusts the value of 'example' by 'val'
+
+to debug server:
+    - run meteor debug
+    - open inspector in chrome on the localhost site
+    - click the node js button
+    - you have to include a "debugger;" line everywhere you want to stop on the server side
+
+bonus:
+    - command: meteor npm install clipboard --save
+    - command: meteor npm install react-flip-move --save
+
+android:
+    - test the app on android using: command: meteor run android
+    - generate build using: command: meteor build "{build output location}" --server={server location ex: http://notes-porter.herokuapp.com/dashboard}
+    - create a signature. in a command prompt, run: keytool -genkey -alias {your-app-name} -keyalg RSA -keysize 2048 -validity 10000
+    - sign the apk. in a command prompt, cd to the output folder where the apk is. then run command: 
+        - command: jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 android-release-unsigned.apk {your-app-name}
+    - zipalign the apk. DONT' cd, but run  to build tools (ex: E:\Users\fox\AppData\Local\Android\sdk\build-tools\28.0.1) then run:
+        - command: E:\Users\fox\AppData\Local\Android\sdk\build-tools\28.0.1\zipalign 4 android-release-unsigned.apk {<your-app-name>}.apk

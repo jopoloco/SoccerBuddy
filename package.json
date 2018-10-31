@@ -1,0 +1,39 @@
+{
+	"name": "linker",
+	"private": true,
+	"scripts": {
+		"start": "meteor run",
+		"test": "SET \"NODE_ENV=test\" && meteor test --driver-package=cultofcoders:mocha"
+	},
+	"dependencies": {
+		"@babel/runtime": "^7.0.0-beta.42",
+		"@material-ui/core": "^1.5.0",
+		"@material-ui/icons": "^2.0.2",
+		"agenda": "^2.0.0",
+		"axios": "^0.18.0",
+		"babel-runtime": "^6.26.0",
+		"body-parser": "^1.18.3",
+		"express": "^4.16.4",
+		"meteor-node-stubs": "^0.3.2",
+		"moment": "^2.22.2",
+		"react": "^16.4.0",
+		"react-addons-pure-render-mixin": "^15.6.2",
+		"react-dom": "^16.4.0",
+		"react-router": "^4.3.1",
+		"react-router-dom": "^4.3.1",
+		"simpl-schema": "^1.5.0",
+		"twilio": "^3.23.1"
+	},
+	"engines": {
+		"node": "8.11.2"
+	},
+	"devDependencies": {
+		"babel-eslint": "^10.0.1",
+		"enzyme": "^3.3.0",
+		"enzyme-adapter-react-16": "^1.1.1",
+		"eslint": "^5.6.1",
+		"eslint-plugin-react": "^7.11.1",
+		"expect": "^1.20.2",
+		"react-addons-test-utils": "^15.6.2"
+	}
+}

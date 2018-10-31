@@ -1,0 +1,113 @@
+// item list
+.item-list {
+	background-color: white;
+	border: 1px solid $grey;
+	display: flex;
+	flex-basis: 95%;
+	flex-wrap: wrap;
+	justify-content: center;
+	// border-top: 2px solid $grey;
+	// border-bottom: 2px solid $grey;
+	margin-bottom: $large-space;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 100%;
+	min-width: $card-grid-min-width;
+	//-webkit-overflow-scrolling: touch; // applies momentum scrolling
+	user-select: none;
+}
+
+.item-list_header {
+	display: flex;
+	flex-direction: column; // makes it take the full width
+	padding: $space;
+}
+
+.item-list-total {
+	color: green;
+	font-size: $middle-font-size;
+	margin: $small-space auto;
+}
+
+.item-list-error {
+	color: red;
+	font-size: $middle-font-size;
+	margin: $small-space auto;
+	text-align: center;
+}
+
+.item-list-container {
+	display: flex;
+	flex-direction: column;
+}
+
+// item
+.item {
+	background-color: $color-default;
+	border: 1px solid $grey;
+	border-left: $item-border-width solid transparent;
+	cursor: pointer;
+	padding: $space;
+	transition: background-color 0.3s ease, border-left 0.3s ease;
+	width: 100%;
+	min-width: $card-grid-min-width;
+
+	@include singleColumn {
+		width: 50%;
+	}
+}
+
+.item:hover {
+	background-color: $light-grey;
+	border-left: $item-border-width solid $color-highlight;
+}
+
+.item-selected,
+.item-selected:hover {
+	background-color: $light-grey;
+	border-left: $item-border-width solid $color-highlight;
+}
+
+.item-title {
+	font-weight: normal;
+	font-size: $base-font-size;
+	margin-bottom: 0.4rem;
+}
+
+.item-selected .item-title {
+	font-weight: bold;
+}
+
+.item-subtitle {
+	color: $dark-grey;
+	margin: 0;
+}
+
+.item-image-div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: $item-image-min-height;
+	width: 100%;
+}
+
+// no items!
+.empty-item {
+	font-style: italic;
+	padding: $space;
+	text-align: center;
+}
+
+.card-media {
+	height: 250px;
+	width: 250px;
+}
+
+.item-text {
+	width: 100%;
+}
+
+.card-paper {
+	text-align: center;
+	width: 100%;
+}

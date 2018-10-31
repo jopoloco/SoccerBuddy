@@ -1,0 +1,148 @@
+.sidebar {
+    background-color: white;
+    border: 1px solid $grey;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.sidebarHeader {
+    background-color: $color-secondary;
+    border: 1px solid $grey;
+    display: flex;
+    flex-direction: row;
+    flex-basis: 15%;
+    padding: $large-space;
+    width: 100%;
+}
+
+.ePanel {
+    // background: lightcoral;
+    margin: 0 0 5px 0;
+    border-bottom: solid 3px $color-primary;
+    box-shadow: 0 0 0 0;
+}
+
+.ePanelSummary {
+    background-color: $color-secondary;
+    color: white;
+    transition: background-color 0.3s ease, border-left 0.3s ease;
+}
+
+.ePanelSummary:hover {
+    background-color: $color-secondary-dark;
+    border-left: $project-border-width solid $color-highlight;
+}
+
+.ePanelSummary-selected,
+.ePanelSummary-selected:hover {
+    background-color: $color-secondary-dark;
+    border-left: $project-border-width solid $color-highlight;
+}
+
+.ePanelDetails {
+    background-color: $dark-grey;
+}
+
+.project-modal {
+    text-align: center;
+    position: absolute;
+    width: $project-modal-width;
+    height: $project-modal-height;
+    background-color: white;
+    border: solid 5px $color-primary;
+    top: calc((100vh - #{$project-modal-height}) / 2);
+    left: calc((100vw - #{$project-modal-width}) / 2);
+    padding: $space calc(#{$space} * 3);
+    flex-direction: column;
+}
+
+.project-modal-title {
+    border-bottom: 3px solid $color-primary;
+    font-size: 3rem;
+    padding: $space;
+}
+
+.project-modal-input {
+    width: 100%;
+    display: flex;
+}
+
+.project-modal-input-field {
+    font-size: $large-font-size !important;
+    border: none !important;
+    line-height: 3rem;
+    padding: 0 !important;
+    margin: 1rem !important;
+}
+
+.project-modal-input-label {
+    font-size: $large-font-size;
+}
+
+.project-modal-button {
+    flex-basis: 33%;
+}
+
+.project-modal-button-label {
+    font-size: $small-font-size;
+}
+
+.project-accordion-title {
+    flex-basis: 50%;
+}
+
+.project-accordion-subtitle {
+    flex-basis: 20%;
+}
+
+.button-edit {
+    float: right;
+    flex-basis: 20%;
+    margin: -8px 0; // counteract the button's native margin
+    padding: 0px;
+}
+
+.delete-modal-div {
+    text-align: center;
+    position: absolute;
+    width: $delete-modal-width;
+    height: $delete-modal-height;
+    background-color: white;
+    border: solid 5px $color-primary;
+    top: calc((100vh - #{$delete-modal-height}) / 2);
+    left: calc((100vw - #{$delete-modal-width}) / 2);
+    padding: $space calc(#{$space} * 3);
+    flex-direction: column;
+}
+
+.delete-modal-title {
+    // border-bottom: 3px solid $color-primary;
+    font-size: $middle-font-size;
+    padding: $space;
+    text-decoration: underline;
+}
+
+.delete-modal-button {
+    flex-basis: 45%;
+}
+.delete-modal-button-label {
+    font-size: $middle-font-size;
+}
+
+.delete-modal-grid-container {
+    height: 100%;
+}
+
+.menu-button {
+    @extend .button-sidebarHeader;
+    flex-basis: 80%;
+    margin: 0px 10px;
+}
+
+.addSearch-button {
+    @extend .button-sidebarHeader;
+    flex-basis: 20%;
+    margin: 0px;
+}

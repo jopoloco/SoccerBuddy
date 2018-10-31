@@ -1,0 +1,15 @@
+to install:
+
+meteor npm twilio --save
+meteor npm express --save
+meteor npm body-parser --save
+choco install ngrok.portable
+
+to run, you will need server code and send_sms code:
+*run the server code via:
+node imports/api/server.js
+*run ngrok via:
+ngrok http 1337
+*change twilio sms settings to hangle incoming messages via the url given 
+*	by the ngrok command, adding "/sms" to the end:
+ex: https://5018de1c.ngrok.io/sms

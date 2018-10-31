@@ -1,0 +1,39 @@
+.boxedView {
+	align-items: center;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	width: 100vw;
+}
+
+.boxedView_box {
+	background-color: $boxedView-bg;
+	border: 1px solid $boxedView-border-color;
+	padding: 2.4rem;
+	text-align: center;
+	width: 50%;
+	min-width: 25rem;
+}
+
+.boxedView_form {
+	display: flex;
+	flex-direction: column;
+}
+
+.boxedView-modal {
+	background: fade-out($boxedView-overlay-bg, 0.3);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.boxview-form-input {
+	border: 1px solid $input-border;
+	color: $body-default-color;
+	font-family: $body-default-font-family;
+	font-size: $base-font-size;
+	margin-bottom: $space;
+	padding: $input-spacing;
+}

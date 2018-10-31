@@ -1,0 +1,45 @@
+.header {
+	background: $color-primary;
+	color: white;
+}
+
+.header_navToggle {
+	cursor: pointer;
+	height: 2rem;
+	width: 2rem;
+
+	@include desktop {
+		display: none;
+	}
+}
+
+.header_content {
+	align-items: center;
+	display: flex;
+	height: $header-height;
+	justify-content: space-between;
+	margin: 0 auto;
+	max-width: $site-max-width;
+	padding: $space;
+}
+
+.header_title {
+	margin: 0;
+}
+
+.logoutButton {
+	background: transparent;
+	border: none;
+	color: white;
+	font-size: $base-font-size;
+	margin: 0 10px;
+	padding: 0;
+	text-decoration: underline;
+}
+
+.uniqueHeading {
+	flex-basis: 40%;
+	flex-shrink: 0;
+	color: $color-primary;
+	font-size: $base-font-size;
+}

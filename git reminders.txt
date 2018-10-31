@@ -1,0 +1,50 @@
+Jopoloco account
+
+ssh:
+open git bash as admin
+command: ssh-keygen -t rsa -b 4096 -C "jporter@sleepyfoxdev.com"
+press enter
+type pass and enter
+type pass and enter
+command: eval $(ssh-agent -s)
+command: ssh-add ~/.ssh/id_rsa
+go to ""C:\Users\jporter\.ssh" and copy contents of id_rsa.pub
+this is your pub key to give out
+
+git reminders:
+
+bring down existing repository:
+git clone _____ "name" //name is the name of the folder to create
+
+change git repo to new one:
+x
+
+add all edited files to commit
+git add .
+
+commit changes locally
+git commit -m "______"
+
+commit changes remotely
+git push
+
+see what the situation is
+git status
+
+see what's different between origin and local
+git diff origin/master
+
+see just the different commits between origin and local
+git log origin/master..master
+
+see what's different between committed and local
+git diff master
+
+delete local git repo 
+[just delete directory]
+
+open mongo db in console
+// with meteor running:
+meteor mongo
+// to query a database title 'database'
+db.database.find()
