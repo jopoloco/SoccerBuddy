@@ -62,7 +62,7 @@ export class Sidebar extends React.Component {
 		return (
 			<div className="sidebar">
 				<SidebarHeader />
-				<SearchEditor />
+				{/* <SearchEditor /> */}
 				{/* <ConfirmDelete /> */}
 			</div>
 		);

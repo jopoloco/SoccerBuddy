@@ -168,6 +168,8 @@ export async function CancelAgendaJob(searchId) {
 	});
 }
 
-console.log("starting baseline jobs...");
-startup();
-console.log("I'm done");
+// console.log("starting baseline jobs...");
+// startup();
+// console.log("I'm done");
+
+console.log("Agenda is currently disabled");
