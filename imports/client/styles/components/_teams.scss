@@ -23,11 +23,6 @@
 	flex-direction: column;
 }
 
-.existingTeam-div {
-	display: flex;
-	flex-direction: column;
-}
-
 .createTeam-div {
 	margin-top: 25px;
 	display: flex;
@@ -48,33 +43,32 @@
 }
 
 .addTeamItem {
-	margin: 20px;
+	margin: 0px;
 }
 
 .addTeamItem-button {
 	// border: 1px solid $color-default;
 	padding: 0px;
 	margin: 0px;
-	flex-basis: 10%;
 }
 
 .existingTeam-div {
 	border-bottom: 5px $color-primary solid;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 }
 
-.existingTeam-div-select {
+.existingTeam-div-sub {
 	display: flex;
 	flex-direction: row;
-	width: 75%;
+	width: 85%;
 	padding: 10px;
 	margin: 10px;
-}
-
-.existingTeam-searchName {
+	justify-content: center;
+	align-items: center;
 }
 
 .existingTeam-searchResults-div {
@@ -118,5 +112,6 @@
 }
 
 .teamSearch {
-	width: 75%;
+	padding: 10px;
+	width: 85%;
 }

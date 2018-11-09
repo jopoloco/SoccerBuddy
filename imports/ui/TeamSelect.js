@@ -7,7 +7,7 @@ import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
 import DropDownMenu from "./DropDownMenu";
-import { FindTeam } from "./FindTeam";
+import FindTeam from "./FindTeam";
 
 import { Teams } from "../api/teams";
 
@@ -21,7 +21,7 @@ import {
 	NoteAdd
 } from "@material-ui/icons";
 import {
-	Button,
+	IconButton,
 	// 	ExpansionPanel,
 	// 	ExpansionPanelSummary,
 	// 	ExpansionPanelDetails,
@@ -67,7 +67,7 @@ export class TeamSelect extends React.Component {
 
 	render() {
 		var addTeamButton = (
-			<Button
+			<IconButton
 				onClick={() => this.setState({ modalOpen: true })}
 				className="button button-secondary addTeam-button"
 				// classes={{
@@ -75,7 +75,7 @@ export class TeamSelect extends React.Component {
 				// }}
 			>
 				<NoteAdd className="icon-large" />
-			</Button>
+			</IconButton>
 		);
 
 		return (

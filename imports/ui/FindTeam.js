@@ -3,14 +3,12 @@ import React from "react";
 import { Session } from "meteor/session";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { AddBox, Cancel, Delete, NoteAdd } from "@material-ui/icons";
-import { Button, Grid, Modal, TextField } from "@material-ui/core";
+import { createContainer } from "meteor/react-meteor-data";
 
-const options = [
-	{ value: "chocolate", label: "Chocolate" },
-	{ value: "strawberry", label: "Strawberry" },
-	{ value: "vanilla", label: "Vanilla" }
-];
+import { Teams } from "../api/teams";
+
+import { AddBox, Cancel, Delete, NoteAdd } from "@material-ui/icons";
+import { IconButton, Grid, Modal, TextField } from "@material-ui/core";
 
 const styles = {
 	customStyles: {
@@ -117,6 +115,11 @@ export class FindTeam extends React.Component {
 	};
 
 	render() {
+		// generate options:
+		var options = this.props.teams.map((team, i) => {
+			return { value: team._id, label: team.name};
+		});
+
 		var TeamModal = (
 			<Modal onClose={this.handleModalClose} open={this.state.modalOpen}>
 				<div className="addTeam-modal-div">
@@ -124,7 +127,7 @@ export class FindTeam extends React.Component {
 						<span className="addTeam-title">
 							Add an existing team:
 						</span>
-						<div className="existingTeam-div-select">
+						<div className="existingTeam-div-sub">
 							<Select
 								value={this.state.selectedTeam}
 								onChange={this.handleTeamChange}
@@ -133,48 +136,49 @@ export class FindTeam extends React.Component {
 								placeholder="Team Name..."
 								styles={styles.customStyles}
 							/>
-							<Button
+							<IconButton
 								onClick={this.addExistingTeam}
-								className="addTeamItem addTeamItem-button"
+								className="addTeamItem-button"
 								classes={{
 									label: "addTeam-modal-button-label"
 								}}
 							>
 								<AddBox />
-							</Button>
+							</IconButton>
 						</div>
 					</div>
 
 					<div className="createTeam-div">
 						<span className="addTeam-title">Create a team:</span>
-						<TextField
-							id="createName"
-							label="Team Name"
-							className="existingTeam-searchName addTeamItem"
-							InputLabelProps={{
-								classes: {
-									root: "existingTeam-input-label"
-								}
-							}}
-							InputProps={{
-								classes: {
-									input: "existingTeam-input-field"
-								}
-							}}
-							value={this.state.createName}
-							onChange={this.handleCreateChange}
-							margin="normal"
-						/>
-						<Button
-							onClick={this.addNewTeam}
-							className="addTeamItem addTeamItem-button"
-							classes={{
-								label: "addTeam-modal-button-label"
-							}}
-						>
-							<AddBox className="icon-left" />
-							Create Team
-						</Button>
+						<div className="existingTeam-div-sub">
+							<TextField
+								id="createName"
+								label="Team Name"
+								className="existingTeam-searchName addTeamItem"
+								InputLabelProps={{
+									classes: {
+										root: "existingTeam-input-label"
+									}
+								}}
+								InputProps={{
+									classes: {
+										input: "existingTeam-input-field"
+									}
+								}}
+								value={this.state.createName}
+								onChange={this.handleCreateChange}
+								margin="normal"
+							/>
+							<IconButton
+								onClick={this.addNewTeam}
+								className="addTeamItem-button"
+								classes={{
+									label: "addTeam-modal-button-label"
+								}}
+							>
+								<AddBox />
+							</IconButton>
+						</div>
 					</div>
 				</div>
 			</Modal>
@@ -186,12 +190,13 @@ export class FindTeam extends React.Component {
 
 FindTeam.propTypes = {
 	isOpen: PropTypes.bool.isRequired,
-	callback: PropTypes.func.isRequired
+	callback: PropTypes.func.isRequired,
+	teams: PropTypes.array.isRequired
 };
 
-// function handleModalClose() {
-// 	this.setState({
-// 		modalOpen: false
-// 	});
-// 	this.props.callback(false);
-// }
+export default createContainer(() => {
+	Meteor.subscribe("teams");
+	return {
+		teams: Teams.find({members: {$nin: [Meteor.userId()]}}).fetch()
+	};
+}, FindTeam);
