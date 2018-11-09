@@ -8,7 +8,7 @@ import { Meteor } from "meteor/meteor";
 import { Refresh } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
 
-import ItemList from "./ItemList";
+// import ItemList from "./ItemList";
 
 export class SearchResults extends React.Component {
 	constructor(props) {
@@ -35,7 +35,7 @@ export class SearchResults extends React.Component {
 		if (this.props.selectedSearchId) {
 			return (
 				<div className="searchResults">
-					<ItemList updateToken={this.state.lastUpdated} />
+					{/* <ItemList updateToken={this.state.lastUpdated} /> */}
 					<div>
 						<Button
 							className="button button-secondary"
@@ -54,7 +54,7 @@ export class SearchResults extends React.Component {
 				<div className="searchResults">
 					<p className="results-message">
 						{" "}
-						Pick or create a search to get started.
+						Pick or create a team to get started.
 					</p>
 				</div>
 			);

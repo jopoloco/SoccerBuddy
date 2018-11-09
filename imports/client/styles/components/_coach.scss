@@ -1,0 +1,39 @@
+.coach-div {
+	height: $coach-div-height;
+	overflow: auto;
+}
+
+.coach-hidden {
+	display: none;
+}
+
+.coach-sub-div {
+	border: 2px solid $color-background;
+	display: flex;
+	flex-direction: column;
+	margin: 25px;
+	padding: 25px;
+}
+
+.coach-sub-div-title {
+	border-bottom: 1px solid $color-default;
+	margin-bottom: 10px;
+	padding-top: 10px;
+}
+
+.memberList-div {
+	height: 200px;
+	overflow: auto;
+}
+
+.memberList-header {
+	font-size: $base-font-size;
+}
+
+.memberList-item {
+	font-size: $base-font-size;
+}
+
+.memberList-item-text {
+	font-size: $base-font-size;
+}

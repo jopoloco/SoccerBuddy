@@ -1,9 +1,9 @@
 // colors
-$color-background: #f8f1e5; //bone
-$color-primary: #2f3131; //coal
-$color-secondary: #426e86; //steel blue
+$color-background: #31a9b8; //aqua blue
+$color-primary: #cf3721; // tomato
+$color-secondary: #f5be41; // yellow pepper
 $color-secondary-dark: shade($color-secondary, 50%);
-$color-highlight: #f9ba32; // sunshine
+$color-highlight: #258039; // avocado
 $color-default: #333333;
 
 $brand-primary: #397ab1;
@@ -66,6 +66,10 @@ $project-modal-width: 550px;
 $delete-modal-height: 200px;
 $delete-modal-width: 550px;
 
+// confirm delete modal
+$team-modal-height: 600px;
+$team-modal-width: 600px;
+
 // page content
 $sidebar-width: 40rem;
 $main-width: calc(#{$site-max-width} - #{$sidebar-width});
@@ -73,3 +77,4 @@ $pageContent-height: calc(
 	100vh - #{$header-height}
 ); // vh is percent of veiwport
 $card-grid-min-width: 27.5rem;
+$coach-div-height: calc(75vh - #{$header-height});

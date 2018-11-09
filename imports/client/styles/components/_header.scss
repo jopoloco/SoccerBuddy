@@ -25,12 +25,16 @@
 
 .header_title {
 	margin: 0;
+	color: white;
+	font-size: $large-font-size;
+	text-decoration: none;
 }
 
-.logoutButton {
+.headerLinkButton {
 	background: transparent;
 	border: none;
 	color: white;
+	cursor: pointer;
 	font-size: $base-font-size;
 	margin: 0 10px;
 	padding: 0;

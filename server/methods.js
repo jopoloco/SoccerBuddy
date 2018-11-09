@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
-import { Searches } from "../imports/api/searches";
-import { SearchResults } from "../imports/api/searchResults";
+import { Teams } from "../imports/api/teams";
+import { Games } from "../imports/api/games";
 import { UpdateSearchResults, PerformSearch } from "./searchHelper";
 import moment from "moment";
 import SimpleSchema from "simpl-schema";
@@ -14,51 +14,30 @@ Meteor.methods({
 		Meteor._sleepForMs(5);
 		return "hello server! return";
 	},
-	"searchResults.insert"(searchId) {
-		if (!this.userId) {
-			throw new Meteor.Error("not-authorized");
-		}
-
-		// results schema
-		var resultsId = SearchResults.insert({
-			userId: this.userId,
-			searchId: searchId
-		});
-
-		return resultsId;
-	},
-	"searches.insert"(projectId) {
-		if (!this.userId) {
-			throw new Meteor.Error("not-authorized");
-		}
-
-		// search schema
-		var searchId = Searches.insert({
-			title: "",
-			userId: this.userId,
-			price: "500",
-			auction: true,
-			auctionBIN: true,
-			fixedPrice: true
-		});
-
-		return searchId;
-	},
-	"searchResults.remove"(searchId) {
+	"teams.insert"(teamName) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
 
 		new SimpleSchema({
-			searchId: {
+			teamName: {
 				type: String,
 				min: 1
 			}
-		}).validate({ searchId });
+		}).validate({ teamName });
 
-		SearchResults.remove({ searchId, userId: this.userId });
+		// team schema
+		var teamId = Teams.insert({
+			coachId: this.userId,
+			name: teamName,
+			members: [this.userId],
+			games: [],
+			requests: []
+		});
+
+		return teamId;
 	},
-	"searches.remove"(_id) {
+	"teams.request"(_id) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -70,29 +49,78 @@ Meteor.methods({
 			}
 		}).validate({ _id });
 
-		Searches.remove({ _id, userId: this.userId });
+		var team = Teams.findOne({ _id });
+
+		if (!team) {
+			throw new Meteor.Error("team not found");
+		}
+
+		if (team.members.includes(this.userId)) {
+			throw new Meteor.Error("already a member of this team");
+		}
+
+		Teams.update(
+			{ _id },
+			{
+				$push: {
+					requests: this.userId
+				}
+			}
+		);
 	},
-	async "searchResults.update"(searchId, items) {
-		await UpdateSearchResults(searchId, items);
+	"games.insert"(teamId) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		var team = Teams.findOne({ _id: teamId });
+		if (!team) {
+			throw new Meteor.Error("team not found");
+		}
+
+		// game schema
+		var gameId = Games.insert({
+			date: moment().valueOf().date,
+			teamId: teamId,
+			opponent: "unnamed",
+			coachId: team.coachId
+		});
+
+		return gameId;
 	},
-	"searchResults.clear"(searchId) {
+	"teams.remove"(_id) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
 
 		new SimpleSchema({
-			searchId: {
+			_id: {
 				type: String,
 				min: 1
 			}
-		}).validate({ searchId });
+		}).validate({ _id });
 
-		SearchResults.update(
-			{ searchId, userId: this.userId },
-			{ $set: { items: [] } }
-		);
+		Teams.remove({ _id, coachId: this.userId });
 	},
-	"searches.update"(_id, updates) {
+	"games.remove"(_id) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			_id: {
+				type: String,
+				min: 1
+			}
+		}).validate({ _id });
+
+		Games.remove({ _id, coachId: this.userId });
+	},
+	// async "teams.update"(teamId, items) {
+	// 	throw new Meteor.Error("not implemented yet");
+	// 	await UpdateSearchResults(teamId, items);
+	// },
+	"teams.update"(_id, updates) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -103,24 +131,65 @@ Meteor.methods({
 				min: 1,
 				optional: false
 			},
-			title: {
+			coachId: {
 				type: String,
 				optional: true
 			},
-			price: {
+			name: {
+				type: String,
+				optional: true
+			}
+			// members: {
+			// 	type: Array,
+			// 	optional: true
+			// },
+			// games: {
+			// 	type: Array,
+			// 	optional: true
+			// },
+			// requests: {
+			// 	type: Array,
+			// 	optional: true
+			// },
+		}).validate({
+			_id,
+			...updates
+		});
+
+		return Teams.update(
+			{ _id, coachId: this.userId },
+			{
+				$set: {
+					...updates
+				}
+			}
+		);
+	},
+	"games.update"(_id, updates) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			_id: {
+				type: String,
+				min: 1,
+				optional: false
+			},
+			teamId: {
 				type: String,
 				optional: true
 			},
-			auction: {
-				type: Boolean,
+			opponent: {
+				type: String,
 				optional: true
 			},
-			fixedPrice: {
-				type: Boolean,
+			coachId: {
+				type: String,
 				optional: true
 			},
-			auctionBIN: {
-				type: Boolean,
+			date: {
+				type: String,
 				optional: true
 			}
 		}).validate({
@@ -128,17 +197,17 @@ Meteor.methods({
 			...updates
 		});
 
-		Searches.update(
-			{ _id, userId: this.userId },
+		Games.update(
+			{ _id, coachId: this.userId },
 			{
 				$set: {
-					updatedAt: moment().valueOf(),
 					...updates
 				}
 			}
 		);
 	},
-	async "search.compile"(searchId) {
+	async "games.compile"(searchId) {
+		throw new Meteor.Error("not implement yet");
 		return await PerformSearch(searchId, false);
 	},
 	"users.findById"(userId) {

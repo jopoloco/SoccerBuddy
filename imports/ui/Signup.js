@@ -25,12 +25,7 @@ export class Signup extends React.Component {
 		var lName = this.lNameRef.current.value.trim();
 		var email = this.emailRef.current.value.trim();
 		var password = this.passRef.current.value.trim();
-		var phoneNumber = this.numRef.current.value
-			.trim()
-			.replace("-", "")
-			.replace("(", "")
-			.replace(")", "")
-			.replace(" ", "");
+		var phoneNumber = this.numRef.current.value.trim().replace(/\D/g, "");
 
 		if (password.length < 9) {
 			return this.setState({
@@ -84,31 +79,36 @@ export class Signup extends React.Component {
 						noValidate
 					>
 						<input
+							className="boxview-form-input"
 							type="fName"
 							ref={this.fNameRef}
 							name="fName"
 							placeholder="First Name"
 						/>
 						<input
+							className="boxview-form-input"
 							type="lName"
 							ref={this.lNameRef}
 							name="lName"
 							placeholder="Last Name"
 						/>
 						<input
+							className="boxview-form-input"
 							type="email"
 							ref={this.emailRef}
 							name="email"
 							placeholder="Email"
 						/>
 						<input
+							className="boxview-form-input"
 							type="password"
 							ref={this.passRef}
 							name="password"
 							placeholder="Password"
 						/>
 						<input
-							type="number"
+							className="boxview-form-input"
+							type="tel"
 							ref={this.numRef}
 							name="phoneNumber"
 							placeholder="555-555-5555"
@@ -123,8 +123,7 @@ export class Signup extends React.Component {
 }
 
 Signup.propTypes = {
-	createUser: PropTypes.func.isRequired,
-	updateUser: PropTypes.func.isRequired
+	createUser: PropTypes.func.isRequired
 };
 
 export default createContainer(() => {

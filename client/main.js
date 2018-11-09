@@ -48,8 +48,8 @@ function onDeviceReady(isNavOpen) {
 Meteor.startup(() => {
 	// Session.set('showVisible', true);
 	console.log("meteor startup...");
-	Session.set("selectedProjectId", undefined);
-	Session.set("selectedSearchId", undefined);
+	Session.set("selectedTeamId", undefined);
+	Session.set("selectedTeamName", undefined);
 	Session.set("isNavOpen", false);
 	ReactDOM.render(AppRouter, document.getElementById("app"));
 	console.log("trying to call twilio startup");

@@ -1,9 +1,12 @@
 import React from "react";
+import { Redirect } from "react-router";
 import PropTypes from "prop-types";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 import { Session } from "meteor/session";
 import { Link } from "react-router-dom";
+
+import TeamSelect from "./TeamSelect";
 
 export const PrivateHeader = (props) => {
 	var navImageSrc = props.isNavOpen ? "/images/x.svg" : "/images/bars.svg";
@@ -15,13 +18,25 @@ export const PrivateHeader = (props) => {
 					src={navImageSrc}
 					onClick={() => props.handleNavClick()}
 				/>
-				<h1 className="header_title">{props.title}</h1>
+				<Link className="header_title" to="/dashboard">
+					{props.title}
+				</Link>
+				<TeamSelect />
 				<div>
-					<Link className="logoutButton" to="/account">
+					<Link className="headerLinkButton" to="/account">
 						Account
 					</Link>
+					{/* <Link className="headerLinkButton" to="/teams">
+						Teams
+					</Link> */}
+					<Link className="headerLinkButton" to="/coach">
+						Coach
+					</Link>
+					<Link className="headerLinkButton" to="/forum">
+						Forum
+					</Link>
 					<button
-						className="logoutButton"
+						className="headerLinkButton"
 						onClick={() => props.handleLogout()}
 					>
 						Logout

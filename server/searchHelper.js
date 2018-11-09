@@ -1,9 +1,12 @@
 // imports
 import { Meteor } from "meteor/meteor";
-import { Searches } from "../imports/api/searches";
-import { SearchResults } from "../imports/api/searchResults";
+import { Teams } from "../imports/api/teams";
+import { Games } from "../imports/api/games";
 import axios from "axios";
 import { sendSMS } from "./twilio_server";
+
+var Searches = null;
+var SearchResults = null;
 
 const myAppIdPRD = "JohnPort-ebuddyte-PRD-493587284-7d44da0e";
 // const myAppIdSBX = "JohnPort-ebuddyte-SBX-9820bcb98-34894b35";

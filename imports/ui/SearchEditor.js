@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 
 import { ConfirmDelete } from "./ConfirmDelete";
-import { Searches } from "../api/searches";
+import { Teams } from "../api/teams";
 
 export class SearchEditor extends React.Component {
 	constructor(props) {
@@ -193,7 +193,7 @@ export class SearchEditor extends React.Component {
 				<div className="editor">
 					<p className="editor-message">
 						{" "}
-						Pick or create a search to get started.
+						Pick or create a team to get started.
 					</p>
 				</div>
 			);
@@ -253,7 +253,8 @@ export default createContainer(() => {
 
 	return {
 		selectedSearchId,
-		search: Searches.findOne({ _id: selectedSearchId }),
+		search: null,
+		team: Teams.findOne({ _id: null }),
 		call: Meteor.call
 	};
 }, SearchEditor);

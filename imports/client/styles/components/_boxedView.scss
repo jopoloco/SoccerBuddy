@@ -1,7 +1,8 @@
 .boxedView {
 	align-items: center;
 	display: flex;
-	height: 100vh;
+	flex-direction: column;
+	height: $pageContent-height;
 	justify-content: center;
 	width: 100vw;
 }

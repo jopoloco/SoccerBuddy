@@ -1,0 +1,122 @@
+.find-team-div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 10px;
+}
+
+.addTeam-button {
+	flex-basis: 10%;
+	margin: 0px;
+}
+
+.addTeam-modal-div {
+	text-align: center;
+	position: absolute;
+	width: $team-modal-width;
+	height: $team-modal-height;
+	background-color: white;
+	border: solid 5px $color-primary;
+	top: calc((100vh - #{$team-modal-height}) / 2);
+	left: calc((100vw - #{$team-modal-width}) / 2);
+	padding: $space calc(#{$space} * 3);
+	flex-direction: column;
+}
+
+.existingTeam-div {
+	display: flex;
+	flex-direction: column;
+}
+
+.createTeam-div {
+	margin-top: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.addTeam-title {
+	// border-bottom: 3px solid $color-primary;
+	font-size: $middle-font-size;
+	padding: $space;
+	text-decoration: underline;
+}
+
+.addTeam-modal-button-label {
+	font-size: $small-font-size;
+}
+
+.addTeamItem {
+	margin: 20px;
+}
+
+.addTeamItem-button {
+	// border: 1px solid $color-default;
+	padding: 0px;
+	margin: 0px;
+	flex-basis: 10%;
+}
+
+.existingTeam-div {
+	border-bottom: 5px $color-primary solid;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.existingTeam-div-select {
+	display: flex;
+	flex-direction: row;
+	width: 75%;
+	padding: 10px;
+	margin: 10px;
+}
+
+.existingTeam-searchName {
+}
+
+.existingTeam-searchResults-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 20px;
+}
+
+.existingTeam-searchResults {
+}
+
+.createTeam-create-div {
+	display: flex;
+	flex-direction: column;
+}
+
+.existingTeam-input-label {
+	font-size: $small-font-size;
+
+	@include desktop() {
+		font-size: $base-font-size;
+	}
+}
+
+.existingTeam-input-field {
+	font-size: $small-font-size !important;
+	border: none !important;
+	line-height: 2rem;
+	padding: 0 !important;
+	margin: 1rem !important;
+
+	@include desktop() {
+		font-size: $base-font-size !important;
+	}
+}
+
+.coachedTeam {
+	color: red;
+}
+
+.teamSearch {
+	width: 75%;
+}

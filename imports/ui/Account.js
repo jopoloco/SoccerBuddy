@@ -1,7 +1,7 @@
 import React from "react";
 import { Meteor } from "meteor/meteor";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
@@ -50,9 +50,7 @@ export class Account extends React.Component {
 		var email = this.emailRef.current.value.trim();
 		var oldPassword = this.oldPassRef.current.value.trim();
 		var newPassword = this.newPassRef.current.value.trim();
-		var phoneNumber = this.numRef.current.value
-			.trim()
-			.replace(/[ ()-]/g, "");
+		var phoneNumber = this.numRef.current.value.trim().replace(/\D/g, "");
 
 		if (
 			oldPassword != "" &&
@@ -130,7 +128,7 @@ export class Account extends React.Component {
 		return (
 			<div className="boxedView">
 				<div className="boxedView_box">
-					<h1>Join</h1>
+					<h1>Account</h1>
 
 					{this.state.error ? (
 						<p id="errorP">{this.state.error}</p>

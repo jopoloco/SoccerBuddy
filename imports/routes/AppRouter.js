@@ -1,10 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import React from "react";
-import ReactDOM from "react-dom";
 import { Redirect } from "react-router";
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import { Tracker } from "meteor/tracker";
 import { Session } from "meteor/session";
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
@@ -19,9 +17,13 @@ import Login from "../ui/Login";
 import NotFound from "../ui/NotFound";
 import Signup from "../ui/Signup";
 import Account from "../ui/Account";
+import Coach from "../ui/Coach";
+import Forum from "../ui/Forum";
+import TeamSelect from "../ui/TeamSelect";
+import Page from "../ui/Page";
 
 const unauthenticatedPages = ["/", "/signup"];
-const authenticatedPages = ["/dashboard"];
+const authenticatedPages = ["/dashboard", "/account", "/coach", "/forum"];
 export const history = createBrowserHistory();
 
 const styleNode = document.createComment("insertion-point-jss");
@@ -43,7 +45,7 @@ function onEnter(isPublic, Component) {
 		if (!Meteor.userId()) {
 			return <Redirect to="/" />;
 		} else {
-			return <Component />;
+			return <Page component={Component} />;
 		}
 	}
 }
@@ -102,6 +104,21 @@ export const AppRouter = (
 						exact
 						path="/account"
 						render={() => onEnter(false, Account)}
+					/>
+					{/* <Route
+						exact
+						path="/teams"
+						render={() => onEnter(false, TeamSelect)}
+					/> */}
+					<Route
+						exact
+						path="/coach"
+						render={() => onEnter(false, Coach)}
+					/>
+					<Route
+						exact
+						path="/forum"
+						render={() => onEnter(false, Forum)}
 					/>
 					<Route component={NotFound} />
 				</Switch>

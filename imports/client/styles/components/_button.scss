@@ -58,3 +58,8 @@
 	@extend .button-secondary;
 	padding: 0px;
 }
+
+.dropdown-newitem {
+	background: $color-secondary;
+	font-style: italic;
+}

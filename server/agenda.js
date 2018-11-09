@@ -1,6 +1,5 @@
 // import { Agenda } from "./agenda";
 import moment from "moment";
-import { Meteor } from "meteor/meteor";
 
 import { PerformSearch, UpdateSearchResults } from "./searchHelper";
 
@@ -14,7 +13,7 @@ var agenda = new Agenda();
 console.log("setting database");
 // agenda.database("localhost:3001/meteor", "agendaJobs");
 agenda.database(
-	"mongodb://heroku_136rm0wj:lrnupb8i8rj9t2pdcsson1vb3j@ds131963.mlab.com:31963/heroku_136rm0wj",
+	"mongodb://heroku_jglbvr0m:rjd5rhm8smeu3mi7il2pigekft@ds259711.mlab.com:59711/heroku_jglbvr0m",
 	"agendaJobs"
 );
 agenda.defaultLockLifetime(600000); // 10 minutes
