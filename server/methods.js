@@ -59,7 +59,7 @@ Meteor.methods({
 			throw new Meteor.Error("already a member of this team");
 		}
 
-		Teams.update(
+		return Teams.update(
 			{ _id },
 			{
 				$push: {

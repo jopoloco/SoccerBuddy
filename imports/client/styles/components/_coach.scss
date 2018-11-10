@@ -16,24 +16,52 @@
 }
 
 .coach-sub-div-title {
-	border-bottom: 1px solid $color-default;
-	margin-bottom: 10px;
-	padding-top: 10px;
+	border-bottom: 1px solid $color-primary;
+	margin: 0px auto 25px auto;
+	padding-bottom: 5px;
+	width: 50%;
 }
 
 .memberList-div {
-	height: 200px;
+	border: 2px solid $color-background;
+	height: 300px;
 	overflow: auto;
+	overflow-x: hidden;
+	margin-bottom: 20px;
 }
 
 .memberList-header {
+	background-color: white;
+	border-bottom: 1px solid $color-primary;
 	font-size: $base-font-size;
 }
 
 .memberList-item {
 	font-size: $base-font-size;
+	margin: 10px;
+}
+
+.memberList-item-empty {
+	@extend .memberList-item;
+	background-color: $grey;
 }
 
 .memberList-item-text {
 	font-size: $base-font-size;
+}
+
+.acceptRequest {
+	color: green !important;
+}
+
+.rejectRequest {
+	color: red !important;
+}
+
+.deleteMember {
+	color: black !important;
+}
+
+.coachCheck {
+	color: blue !important;
 }

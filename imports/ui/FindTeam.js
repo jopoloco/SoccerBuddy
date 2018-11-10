@@ -45,7 +45,8 @@ export class FindTeam extends React.Component {
 			modalOpen: this.props.isOpen,
 			searchName: "",
 			createName: "",
-			existingTeamId: ""
+			existingTeamId: "",
+			selectedTeam: ""
 		};
 	}
 
@@ -73,7 +74,10 @@ export class FindTeam extends React.Component {
 	};
 
 	handleTeamChange = (selectedTeam) => {
-		this.setState({ existingTeamId: selectedTeam.value });
+		this.setState({
+			existingTeamId: selectedTeam.value,
+			selectedTeam: selectedTeam
+		});
 		console.log("Option selected: " + selectedTeam.label);
 	};
 
@@ -89,6 +93,9 @@ export class FindTeam extends React.Component {
 				alert(err);
 			}
 			if (res) {
+				// clear entry
+				this.setState({ existingTeamId: "", selectedTeam: "" });
+
 				// set success message?
 			}
 		});
@@ -117,7 +124,7 @@ export class FindTeam extends React.Component {
 	render() {
 		// generate options:
 		var options = this.props.teams.map((team, i) => {
-			return { value: team._id, label: team.name};
+			return { value: team._id, label: team.name };
 		});
 
 		var TeamModal = (
@@ -197,6 +204,11 @@ FindTeam.propTypes = {
 export default createContainer(() => {
 	Meteor.subscribe("teams");
 	return {
-		teams: Teams.find({members: {$nin: [Meteor.userId()]}}).fetch()
+		teams: Teams.find({
+			$and: [
+				{ members: { $nin: [Meteor.userId()] } },
+				{ requests: { $nin: [Meteor.userId()] } }
+			]
+		}).fetch()
 	};
 }, FindTeam);
