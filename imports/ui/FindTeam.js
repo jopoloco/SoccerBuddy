@@ -96,7 +96,13 @@ export class FindTeam extends React.Component {
 				// clear entry
 				this.setState({ existingTeamId: "", selectedTeam: "" });
 
-				// set success message?
+				// set success message
+				var sn = document.getElementById("savedNotification");
+				sn.classList.toggle("saved-visible", true);
+				setTimeout(
+					() => sn.classList.toggle("saved-visible", false),
+					1000
+				);
 			}
 		});
 	};
@@ -126,6 +132,12 @@ export class FindTeam extends React.Component {
 		var options = this.props.teams.map((team, i) => {
 			return { value: team._id, label: team.name };
 		});
+
+		var SaveNotification = (
+			<div id="savedNotification" className="saved">
+				<p>Membership requested</p>
+			</div>
+		);
 
 		var TeamModal = (
 			<Modal onClose={this.handleModalClose} open={this.state.modalOpen}>
@@ -187,6 +199,7 @@ export class FindTeam extends React.Component {
 							</IconButton>
 						</div>
 					</div>
+					{SaveNotification}
 				</div>
 			</Modal>
 		);

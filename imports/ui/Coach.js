@@ -8,6 +8,7 @@ import { Teams } from "../api/teams";
 
 import { ConfirmDelete } from "./ConfirmDelete";
 import MemberList from "./MemberList";
+import GameList from "./GameList";
 
 import { Delete, Save } from "@material-ui/icons";
 import {
@@ -222,27 +223,10 @@ export class Coach extends React.Component {
 						<div className="coach-sub-div">
 							<span className="coach-sub-div-title">Members</span>
 							<MemberList />
-							<Button
-								onClick={() =>
-									this.confirmDeleteFunc(REQUEST, "12345")
-								}
-								className="button button-secondary menu-button"
-								disabled={this.state.disabled}
-							>
-								Delete request
-							</Button>
 						</div>
 						<div className="coach-sub-div">
 							<span className="coach-sub-div-title">Games</span>
-							<Button
-								onClick={() =>
-									this.confirmDeleteFunc(GAME, "67890")
-								}
-								className="button button-secondary menu-button"
-								disabled={this.state.disabled}
-							>
-								Delete member
-							</Button>
+							<GameList />
 						</div>
 						<Button
 							onClick={() =>

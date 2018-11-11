@@ -5,7 +5,7 @@ import { createContainer } from "meteor/react-meteor-data";
 import { Teams } from "../api/teams";
 import { Session } from "meteor/session";
 
-import { Delete, Cancel, CheckCircle, Save, Comment } from "@material-ui/icons";
+import { Delete, Save, Comment } from "@material-ui/icons";
 import {
 	Button,
 	Checkbox,
@@ -21,11 +21,12 @@ import {
 
 import { ConfirmDelete } from "./ConfirmDelete";
 
-export class RequestItem extends React.Component {
+export class GameItem extends React.Component {
 	state = {
 		userName: "Not Available",
 		userId: "",
-		deleteModalOpen: false
+		deleteModalOpen: false,
+		coach: false
 	};
 
 	componentDidMount() {
@@ -45,25 +46,7 @@ export class RequestItem extends React.Component {
 		});
 	}
 
-	acceptRequest = () => {
-		var teamId = Session.get("selectedTeamId");
-		Meteor.call(
-			"teams.request.approve",
-			this.state.userId,
-			teamId,
-			function(err, res) {
-				if (err) {
-					alert(err);
-				}
-
-				if (res) {
-					// ...
-				}
-			}
-		);
-	};
-
-	rejectRequest = (res) => {
+	deleteMember = (res) => {
 		this.setState({ deleteModalOpen: false });
 
 		if (!res) {
@@ -71,7 +54,7 @@ export class RequestItem extends React.Component {
 		}
 
 		var teamId = Session.get("selectedTeamId");
-		Meteor.call("teams.request.reject", this.state.userId, teamId, function(
+		Meteor.call("teams.member.remove", this.state.userId, teamId, function(
 			err,
 			res
 		) {
@@ -83,6 +66,11 @@ export class RequestItem extends React.Component {
 				// ...
 			}
 		});
+	};
+
+	toggleCoach = () => {
+		var coach = !this.state.coach;
+		this.setState({ coach });
 	};
 
 	render() {
@@ -99,37 +87,39 @@ export class RequestItem extends React.Component {
 					primary={this.state.userName}
 				/>
 				<ListItemSecondaryAction>
+					<Checkbox
+						checked={this.state.coach}
+						tabIndex={-1}
+						onChange={this.toggleCoach}
+						classes={{
+							checked: "coachCheck"
+						}}
+					/>
 					<IconButton
-						aria-label="Accept"
-						className="acceptRequest"
-						onClick={this.acceptRequest}
-					>
-						<CheckCircle />
-					</IconButton>
-					<IconButton
-						aria-label="Reject"
-						className="rejectRequest"
+						aria-label="Delete"
+						className="deleteMember"
 						onClick={() => this.setState({ deleteModalOpen: true })}
 					>
-						<Cancel />
+						<Delete />
 					</IconButton>
 				</ListItemSecondaryAction>
 				<ConfirmDelete
 					isOpen={this.state.deleteModalOpen}
-					type={"request"}
-					callback={this.rejectRequest}
+					type={"member"}
+					callback={this.deleteMember}
 				/>
 			</ListItem>
 		);
 	}
 }
 
-RequestItem.propTypes = {
+GameItem.propTypes = {
 	userId: PropTypes.string.isRequired
 };
 
 export default createContainer(() => {
 	return {
 		// anything returned in here is passed into the component down below
+		team: Teams.findOne({ _id: Session.get("selectedTeamId") })
 	};
-}, RequestItem);
+}, GameItem);

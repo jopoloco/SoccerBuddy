@@ -68,6 +68,129 @@ Meteor.methods({
 			}
 		);
 	},
+	"teams.request.approve"(user, team) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			user: {
+				type: String,
+				min: 1
+			},
+			team: {
+				type: String,
+				min: 1
+			}
+		}).validate({ user, team });
+
+		var teamInstance = Teams.findOne({ _id: team });
+
+		if (!teamInstance) {
+			throw new Meteor.Error("team not found");
+		}
+
+		if (teamInstance.members.includes(user)) {
+			throw new Meteor.Error("User is already a member of this team");
+		}
+
+		if (!teamInstance.requests.includes(user)) {
+			throw new Meteor.Error(
+				"User has not requested membership to this team"
+			);
+		}
+
+		return Teams.update(
+			{ _id: team },
+			{
+				$push: {
+					members: user
+				},
+				$pull: {
+					requests: user
+				}
+			}
+		);
+	},
+	"teams.request.reject"(user, team) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			user: {
+				type: String,
+				min: 1
+			},
+			team: {
+				type: String,
+				min: 1
+			}
+		}).validate({ user, team });
+
+		var teamInstance = Teams.findOne({ _id: team });
+
+		if (!teamInstance) {
+			throw new Meteor.Error("team not found");
+		}
+
+		if (!teamInstance.requests.includes(user)) {
+			throw new Meteor.Error(
+				"User has not requested membership to this team"
+			);
+		}
+
+		return Teams.update(
+			{ _id: team },
+			{
+				$pull: {
+					requests: user
+				}
+			}
+		);
+	},
+	"teams.member.remove"(user, team) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			user: {
+				type: String,
+				min: 1
+			},
+			team: {
+				type: String,
+				min: 1
+			}
+		}).validate({ user, team });
+
+		var teamInstance = Teams.findOne({ _id: team });
+
+		if (!teamInstance) {
+			throw new Meteor.Error("team not found");
+		}
+
+		if (!teamInstance.members.includes(user)) {
+			throw new Meteor.Error("User is not a member of this team");
+		}
+
+		if (teamInstance.coachId == user) {
+			throw new Meteor.Error("Cannot remove coach from team");
+		}
+
+		return Teams.update(
+			{ _id: team },
+			{
+				$pull: {
+					members: user
+				}
+			}
+		);
+	},
+	"teams.toggleCoach"(user, team, isCoach) {
+		throw new Meteor.Error("not implement yet");
+	},
 	"games.insert"(teamId) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");

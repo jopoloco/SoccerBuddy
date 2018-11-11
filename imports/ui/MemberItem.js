@@ -19,9 +19,13 @@ import {
 	TextField
 } from "@material-ui/core";
 
+import { ConfirmDelete } from "./ConfirmDelete";
+
 export class MemberItem extends React.Component {
 	state = {
-		name: "Not Available",
+		userName: "Not Available",
+		userId: "",
+		deleteModalOpen: false,
 		coach: false
 	};
 
@@ -34,13 +38,34 @@ export class MemberItem extends React.Component {
 			}
 
 			if (user) {
-				self.setState({ name: user.fName + " " + user.lName });
+				self.setState({
+					userName: user.fName + " " + user.lName,
+					userId: user._id
+				});
 			}
 		});
 	}
 
-	deleteMember = () => {
-		alert("delete");
+	deleteMember = (res) => {
+		this.setState({ deleteModalOpen: false });
+
+		if (!res) {
+			return;
+		}
+
+		var teamId = Session.get("selectedTeamId");
+		Meteor.call("teams.member.remove", this.state.userId, teamId, function(
+			err,
+			res
+		) {
+			if (err) {
+				alert(err);
+			}
+
+			if (res) {
+				// ...
+			}
+		});
 	};
 
 	toggleCoach = () => {
@@ -59,7 +84,7 @@ export class MemberItem extends React.Component {
 			>
 				<ListItemText
 					className="memberList-item-text"
-					primary={this.state.name}
+					primary={this.state.userName}
 				/>
 				<ListItemSecondaryAction>
 					<Checkbox
@@ -73,11 +98,16 @@ export class MemberItem extends React.Component {
 					<IconButton
 						aria-label="Delete"
 						className="deleteMember"
-						onClick={this.deleteMember}
+						onClick={() => this.setState({ deleteModalOpen: true })}
 					>
 						<Delete />
 					</IconButton>
 				</ListItemSecondaryAction>
+				<ConfirmDelete
+					isOpen={this.state.deleteModalOpen}
+					type={"member"}
+					callback={this.deleteMember}
+				/>
 			</ListItem>
 		);
 	}
