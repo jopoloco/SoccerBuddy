@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Cancel, Delete } from "@material-ui/icons";
 import { Button, Grid, Modal } from "@material-ui/core";
 
-export default class ConfirmDelete extends React.Component {
+export default class GameCreate extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -86,7 +86,7 @@ export default class ConfirmDelete extends React.Component {
 	}
 }
 
-ConfirmDelete.propTypes = {
+GameCreate.propTypes = {
 	isOpen: PropTypes.bool.isRequired,
 	type: PropTypes.string.isRequired
 };

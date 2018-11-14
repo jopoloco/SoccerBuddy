@@ -24,7 +24,7 @@ import { Meteor } from "meteor/meteor";
 // 	Typography
 // } from "@material-ui/core";
 
-// import { ConfirmDelete } from "./ConfirmDelete";
+// import ConfirmDelete from "./ConfirmDelete";
 import SidebarHeader from "./SidebarHeader";
 import SearchEditor from "./SearchEditor";
 

@@ -69,13 +69,26 @@ export class DropDownMenu extends React.Component {
 		var { anchorEl } = this.state;
 		var source = this.props.source;
 
+		var addNew = undefined;
+		if (this.props.item == "Team") {
+			addNew = (
+				<MenuItem
+					onClick={() => this.handleAddItemClick()}
+					className={"dropdown-newitem"}
+				>
+					{"Add new " + this.props.item}
+				</MenuItem>
+			);
+		}
+
 		var items = (
 			<div>
 				{source.map((item, i) => {
+					var name = item.name ? item.name : item.title;
 					return (
 						<MenuItem
 							onClick={() =>
-								this.handleMenuItemClick(item._id, item.name)
+								this.handleMenuItemClick(item._id, name)
 							}
 							key={item._id}
 							selected={item._id == this.props.selectedId}
@@ -86,16 +99,11 @@ export class DropDownMenu extends React.Component {
 									: ""
 							}
 						>
-							{item.name || "Untitled " + this.props.item}
+							{name || "Untitled " + this.props.item}
 						</MenuItem>
 					);
 				})}
-				<MenuItem
-					onClick={() => this.handleAddItemClick()}
-					className={"dropdown-newitem"}
-				>
-					{"Add new " + this.props.item}
-				</MenuItem>
+				{addNew}
 			</div>
 		);
 
@@ -121,9 +129,15 @@ export class DropDownMenu extends React.Component {
 			>
 				{this.state.disabled
 					? "No " + this.props.item + " Available"
-					: Session.get("selectedTeamName") == undefined
-						? "Select a " + this.props.item
-						: Session.get("selectedTeamName")}
+					: this.props.item == "Team"
+						? Session.get("selectedTeamName") == undefined
+							? "Select a " + this.props.item
+							: Session.get("selectedTeamName")
+						: this.props.item == "Game"
+							? Session.get("selectedGameTitle") == undefined
+								? "Select a " + this.props.item
+								: Session.get("selectedGameTitle")
+							: "Select a " + this.props.item}
 			</Button>
 		);
 

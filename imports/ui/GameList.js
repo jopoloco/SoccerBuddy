@@ -2,7 +2,7 @@ import React from "react";
 import { Meteor } from "meteor/meteor";
 import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
-import { Teams } from "../api/teams";
+import { Games } from "../api/games";
 import { Session } from "meteor/session";
 
 import { Delete, Save, Comment } from "@material-ui/icons";
@@ -19,8 +19,6 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import RequestItem from "./RequestItem";
-import MemberItem from "./MemberItem";
 import GameItem from "./GameItem";
 
 export class GameList extends React.Component {
@@ -28,47 +26,29 @@ export class GameList extends React.Component {
 		checked: [0]
 	};
 
-	handleToggle = (value) => () => {
-		const { checked } = this.state;
-		const currentIndex = checked.indexOf(value);
-		const newChecked = [...checked];
+	createGame = () => {
+		Meteor.call("games.insert", Session.get("selectedTeamId"), function(
+			err,
+			res
+		) {
+			if (err) {
+				alert(err);
+			}
 
-		if (currentIndex === -1) {
-			newChecked.push(value);
-		} else {
-			newChecked.splice(currentIndex, 1);
-		}
-
-		this.setState({
-			checked: newChecked
+			if (res) {
+				// ...
+			}
 		});
 	};
 
 	render() {
-		if (!this.props.team) {
-			return (
-				<div className="memberList-div">
-					<span>Team not found!</span>
-				</div>
-			);
-		}
-
-		var requestsTable = (
-			<div className="memberList-item-empty">No requests found</div>
-		);
-		var membersTable = (
-			<div className="memberList-item-empty">No members found</div>
+		var gamesTable = (
+			<div className="memberList-item-empty">No games found</div>
 		);
 
-		if (this.props.team.requests.length > 0) {
-			requestsTable = this.props.team.requests.map((request, i) => (
-				<RequestItem key={request} userId={request} />
-			));
-		}
-
-		if (this.props.team.members.length > 0) {
-			membersTable = this.props.team.members.map((member, i) => (
-				<MemberItem key={member} userId={member} />
+		if (this.props.games.length > 0) {
+			gamesTable = this.props.games.map((game, i) => (
+				<GameItem key={game._id} game={game} />
 			));
 		}
 
@@ -76,13 +56,14 @@ export class GameList extends React.Component {
 			<div className="memberList-div">
 				<List className="">
 					<ListSubheader className="memberList-header">
-						REQUESTS
+						<Button
+							onClick={this.createGame}
+							className="createGame-button"
+						>
+							Create Game
+						</Button>
 					</ListSubheader>
-					{requestsTable}
-					<ListSubheader className="memberList-header">
-						MEMBERS
-					</ListSubheader>
-					{membersTable}
+					{gamesTable}
 				</List>
 			</div>
 		);
@@ -90,12 +71,20 @@ export class GameList extends React.Component {
 }
 
 GameList.propTypes = {
-	team: PropTypes.object
+	games: PropTypes.array
 };
 
 export default createContainer(() => {
+	Meteor.subscribe("games");
 	return {
 		// anything returned in here is passed into the component down below
-		team: Teams.findOne({ _id: Session.get("selectedTeamId") })
+		games: Games.find(
+			{ teamId: Session.get("selectedTeamId") },
+			{
+				sort: {
+					date: 1
+				}
+			}
+		).fetch()
 	};
 }, GameList);

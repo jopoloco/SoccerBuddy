@@ -59,6 +59,8 @@ export class TeamSelect extends React.Component {
 	handleTeamClick = (_id, name) => {
 		Session.set("selectedTeamId", _id);
 		Session.set("selectedTeamName", name);
+		Session.set("selectedGameId", undefined);
+		Session.set("selectedGameTitle", undefined);
 	};
 
 	findTeamCallback = () => {

@@ -7,6 +7,7 @@ import { Session } from "meteor/session";
 import { Games } from "../api/games";
 import { FindTeam } from "./FindTeam";
 import DropDownMenu from "./DropDownMenu";
+import GameList from "./GameList";
 
 import {
 	// Edit
@@ -40,21 +41,20 @@ export class SidebarHeader extends React.Component {
 
 	handleGameClick = (_id, name) => {
 		// do stuff here!
-		// Session.set("selectedTeamId", _id);
-		// Session.set("selectedTeamName", name);
+		Session.set("selectedGameId", _id);
+		Session.set("selectedGameTitle", name);
 	};
 
 	render() {
-		var games = this.props.games;
-		var reducedGames = Games.find({ members: Meteor.userId() }).fetch();
-
 		return (
 			<div className="sidebarHeader">
 				<DropDownMenu
-					source={reducedGames}
+					source={this.props.games}
 					item="Game"
 					onClickEvent={this.handleGameClick}
-					onAddEvent={() => {}}
+					onAddEvent={() => {
+						alert("Can't add games from here!");
+					}}
 				/>
 			</div>
 		);
@@ -69,21 +69,18 @@ SidebarHeader.propTypes = {
 };
 
 export default createContainer(() => {
-	var userId = Meteor.userId();
-
+	Meteor.subscribe("games");
 	return {
 		// anything returned in here is passed into the component down below
 		meteorCall: Meteor.call,
 		Session,
-		search: null,
-		games: Games.find({}).fetch()
-		// games: Games.find(
-		// 	{ team: { $in: teams._id}  },
-		// 	{
-		// 		sort: {
-		// 			title: 1
-		// 		}
-		// 	}
-		// ).fetch(),
+		games: Games.find(
+			{ teamId: Session.get("selectedTeamId") },
+			{
+				sort: {
+					date: 1
+				}
+			}
+		).fetch()
 	};
 }, SidebarHeader);

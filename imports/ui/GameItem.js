@@ -2,10 +2,9 @@ import React from "react";
 import { Meteor } from "meteor/meteor";
 import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
-import { Teams } from "../api/teams";
 import { Session } from "meteor/session";
 
-import { Delete, Save, Comment } from "@material-ui/icons";
+import { Delete, Edit, Save, Comment } from "@material-ui/icons";
 import {
 	Button,
 	Checkbox,
@@ -19,45 +18,54 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { ConfirmDelete } from "./ConfirmDelete";
+import ConfirmDelete from "./ConfirmDelete";
+import GameCreate from "./GameCreate";
 
 export class GameItem extends React.Component {
 	state = {
-		userName: "Not Available",
-		userId: "",
+		title: "Untitled",
+		type: "N/A",
+		date: "N/A",
 		deleteModalOpen: false,
-		coach: false
+		editModalOpen: false
 	};
 
 	componentDidMount() {
-		var self = this;
-
-		Meteor.call("users.findById", this.props.userId, function(err, user) {
-			if (err) {
-				alert(err);
-			}
-
-			if (user) {
-				self.setState({
-					userName: user.fName + " " + user.lName,
-					userId: user._id
-				});
-			}
-		});
+		this.updateState();
 	}
 
-	deleteMember = (res) => {
+	componentDidUpdate() {
+		this.updateState();
+	}
+
+	updateState() {
+		if (!this.props.game) {
+			return;
+		}
+
+		var game = this.props.game;
+
+		if (this.state.title != game.title) {
+			this.setState({ title: game.title });
+		}
+
+		if (this.state.type != game.type) {
+			this.setState({ type: game.type });
+		}
+
+		if (this.state.date != game.date) {
+			this.setState({ date: game.date });
+		}
+	}
+
+	deleteGame = (res) => {
 		this.setState({ deleteModalOpen: false });
 
 		if (!res) {
 			return;
 		}
 
-		var teamId = Session.get("selectedTeamId");
-		Meteor.call("teams.member.remove", this.state.userId, teamId, function(
-			err,
-			res
-		) {
+		Meteor.call("games.remove", this.props.game._id, function(err, res) {
 			if (err) {
 				alert(err);
 			}
@@ -68,13 +76,32 @@ export class GameItem extends React.Component {
 		});
 	};
 
-	toggleCoach = () => {
-		var coach = !this.state.coach;
-		this.setState({ coach });
+	editGame = (res) => {
+		this.setState({ editModalOpen: false });
+
+		if (!res) {
+			return;
+		}
+
+		// Meteor.call("games.remove", this.props.gameId, function(err, res) {
+		// 	if (err) {
+		// 		alert(err);
+		// 	}
+
+		// 	if (res) {
+		// 		// ...
+		// 	}
+		// });
 	};
 
 	render() {
-		var { userId } = this.props;
+		if (!this.props.game) {
+			return (
+				<div className="memberList-div">
+					<span>Game not found!</span>
+				</div>
+			);
+		}
 
 		return (
 			<ListItem
@@ -84,20 +111,19 @@ export class GameItem extends React.Component {
 			>
 				<ListItemText
 					className="memberList-item-text"
-					primary={this.state.userName}
+					primary={this.state.title}
 				/>
 				<ListItemSecondaryAction>
-					<Checkbox
-						checked={this.state.coach}
-						tabIndex={-1}
-						onChange={this.toggleCoach}
-						classes={{
-							checked: "coachCheck"
-						}}
-					/>
+					<IconButton
+						aria-label="Edit"
+						className="editGame"
+						onClick={() => alert("edit game")}
+					>
+						<Edit />
+					</IconButton>
 					<IconButton
 						aria-label="Delete"
-						className="deleteMember"
+						className="deleteGame"
 						onClick={() => this.setState({ deleteModalOpen: true })}
 					>
 						<Delete />
@@ -105,21 +131,25 @@ export class GameItem extends React.Component {
 				</ListItemSecondaryAction>
 				<ConfirmDelete
 					isOpen={this.state.deleteModalOpen}
-					type={"member"}
-					callback={this.deleteMember}
+					type={"game"}
+					callback={this.deleteGame}
 				/>
+				{/* <GameEdit
+					isOpen={this.state.editModalOpen}
+					type={"edit"}
+					callback={this.editGame}
+				/> */}
 			</ListItem>
 		);
 	}
 }
 
 GameItem.propTypes = {
-	userId: PropTypes.string.isRequired
+	game: PropTypes.object.isRequired
 };
 
 export default createContainer(() => {
 	return {
 		// anything returned in here is passed into the component down below
-		team: Teams.findOne({ _id: Session.get("selectedTeamId") })
 	};
 }, GameItem);

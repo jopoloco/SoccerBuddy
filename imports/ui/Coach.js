@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
 import { Teams } from "../api/teams";
 
-import { ConfirmDelete } from "./ConfirmDelete";
+import ConfirmDelete from "./ConfirmDelete";
 import MemberList from "./MemberList";
 import GameList from "./GameList";
 

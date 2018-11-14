@@ -12,7 +12,7 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { ConfirmDelete } from "./ConfirmDelete";
+import ConfirmDelete from "./ConfirmDelete";
 import { Teams } from "../api/teams";
 
 export class SearchEditor extends React.Component {

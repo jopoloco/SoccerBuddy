@@ -19,7 +19,7 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { ConfirmDelete } from "./ConfirmDelete";
+import ConfirmDelete from "./ConfirmDelete";
 
 export class MemberItem extends React.Component {
 	state = {

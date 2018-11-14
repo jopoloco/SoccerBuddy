@@ -206,6 +206,8 @@ Meteor.methods({
 			date: moment().valueOf().date,
 			teamId: teamId,
 			opponent: "unnamed",
+			title: "untitled",
+			type: "",
 			coachId: team.coachId
 		});
 
@@ -223,7 +225,7 @@ Meteor.methods({
 			}
 		}).validate({ _id });
 
-		Teams.remove({ _id, coachId: this.userId });
+		return Teams.remove({ _id, coachId: this.userId });
 	},
 	"games.remove"(_id) {
 		if (!this.userId) {
@@ -237,7 +239,7 @@ Meteor.methods({
 			}
 		}).validate({ _id });
 
-		Games.remove({ _id, coachId: this.userId });
+		return Games.remove({ _id, coachId: this.userId });
 	},
 	// async "teams.update"(teamId, items) {
 	// 	throw new Meteor.Error("not implemented yet");
@@ -320,7 +322,7 @@ Meteor.methods({
 			...updates
 		});
 
-		Games.update(
+		return Games.update(
 			{ _id, coachId: this.userId },
 			{
 				$set: {

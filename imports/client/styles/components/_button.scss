@@ -63,3 +63,8 @@
 	background: $color-secondary;
 	font-style: italic;
 }
+
+.createGame-button {
+	@extend .button;
+	width: 100%;
+}
