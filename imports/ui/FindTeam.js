@@ -121,7 +121,7 @@ export class FindTeam extends React.Component {
 			if (res) {
 				// set new team to selected team
 				Session.set("selectedTeamId", res);
-				Session.set("selectedTeamName", teamName);
+				Session.set("selectedTeamTitle", teamName);
 				this.handleModalClose();
 			}
 		});
@@ -130,7 +130,7 @@ export class FindTeam extends React.Component {
 	render() {
 		// generate options:
 		var options = this.props.teams.map((team, i) => {
-			return { value: team._id, label: team.name };
+			return { value: team._id, label: team.title };
 		});
 
 		var SaveNotification = (

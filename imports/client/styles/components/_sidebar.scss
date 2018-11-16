@@ -11,7 +11,7 @@
 	background-color: $color-secondary;
 	border: 1px solid $grey;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-basis: 15%;
 	justify-content: center;
 	align-items: center;
@@ -119,6 +119,15 @@
 	flex-direction: column;
 }
 
+.create-modal-div {
+	@extend .delete-modal-div;
+	display: flex;
+	width: $create-modal-width;
+	height: $create-modal-height;
+	top: calc((100vh - #{$create-modal-height}) / 2);
+	left: calc((100vw - #{$create-modal-width}) / 2);
+}
+
 .delete-modal-title {
 	// border-bottom: 3px solid $color-primary;
 	font-size: $middle-font-size;
@@ -148,4 +157,9 @@
 	@extend .button-sidebarHeader;
 	flex-basis: 20%;
 	margin: 0px;
+}
+
+.attending-button {
+	background: $color-highlight;
+	color: white;
 }

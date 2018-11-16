@@ -19,7 +19,6 @@ import {
 } from "@material-ui/core";
 
 import ConfirmDelete from "./ConfirmDelete";
-import GameCreate from "./GameCreate";
 
 export class GameItem extends React.Component {
 	state = {

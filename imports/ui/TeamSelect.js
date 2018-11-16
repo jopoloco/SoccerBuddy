@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
-import DropDownMenu from "./DropDownMenu";
+import TeamMenu from "./TeamMenu";
 import FindTeam from "./FindTeam";
 
 import { Teams } from "../api/teams";
@@ -56,11 +56,27 @@ export class TeamSelect extends React.Component {
 		});
 	}
 
-	handleTeamClick = (_id, name) => {
+	handleTeamClick = (_id, title) => {
 		Session.set("selectedTeamId", _id);
-		Session.set("selectedTeamName", name);
-		Session.set("selectedGameId", undefined);
-		Session.set("selectedGameTitle", undefined);
+		Session.set("selectedTeamTitle", title);
+		Session.set("selectedEventId", undefined);
+		Session.set("selectedEventTitle", undefined);
+	};
+
+	handleTeamDelete = (teamId) => {
+		var userId = Meteor.userId();
+		Meteor.call("teams.member.remove", userId, teamId, function(err, res) {
+			if (err) {
+				alert(err);
+			}
+
+			if (res) {
+				Session.set("selectedTeamId", undefined);
+				Session.set("selectedTeamTitle", undefined);
+				Session.set("selectedEventId", undefined);
+				Session.set("selectedEventTitle", undefined);
+			}
+		});
 	};
 
 	findTeamCallback = () => {
@@ -68,37 +84,15 @@ export class TeamSelect extends React.Component {
 	};
 
 	render() {
-		var addTeamButton = (
-			<IconButton
-				onClick={() => this.setState({ modalOpen: true })}
-				className="button button-secondary addTeam-button"
-				// classes={{
-				//     label: "button-label"
-				// }}
-			>
-				<NoteAdd className="icon-large" />
-			</IconButton>
-		);
-
 		return (
-		// <div className="boxedView">
-		// 	<div className="boxedView_box">
-		/* <h1>Pick a Team</h1>
-
-				{this.state.error ? (
-					<p id="errorP">{this.state.error}</p>
-				) : (
-					undefined
-				)} */
-
 			<div className="find-team-div">
-				<DropDownMenu
+				<TeamMenu
 					source={this.props.teams}
 					item="Team"
 					onClickEvent={this.handleTeamClick}
 					onAddEvent={() => this.setState({ modalOpen: true })}
+					onDeleteEvent={this.handleTeamDelete}
 				/>
-				{/* {addTeamButton} */}
 				<FindTeam
 					isOpen={this.state.modalOpen}
 					callback={this.findTeamCallback}

@@ -30,10 +30,15 @@
 	margin-bottom: 20px;
 }
 
+.memberList {
+	padding-top: 0px;
+}
+
 .memberList-header {
 	background-color: white;
 	border-bottom: 1px solid $color-primary;
 	font-size: $base-font-size;
+	padding-top: 8px;
 }
 
 .memberList-item {
@@ -64,4 +69,12 @@
 
 .coachCheck {
 	color: blue !important;
+}
+
+.createGame-type {
+	margin: 15px;
+}
+
+.create-modal-title {
+	font-size: $large-font-size;
 }

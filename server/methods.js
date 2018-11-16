@@ -8,28 +8,32 @@ import SimpleSchema from "simpl-schema";
 import { CancelAgendaJob, AddAgendaJob } from "./agenda";
 import { setupApi } from "./twilio_server";
 
+const YES = 0;
+const NO = 1;
+const MAYBE = 2;
+
 Meteor.methods({
 	greet() {
 		console.log("Hello server! main");
 		Meteor._sleepForMs(5);
 		return "hello server! return";
 	},
-	"teams.insert"(teamName) {
+	"teams.insert"(teamTitle) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
 
 		new SimpleSchema({
-			teamName: {
+			teamTitle: {
 				type: String,
 				min: 1
 			}
-		}).validate({ teamName });
+		}).validate({ teamTitle });
 
 		// team schema
 		var teamId = Teams.insert({
 			coachId: this.userId,
-			name: teamName,
+			title: teamTitle,
 			members: [this.userId],
 			games: [],
 			requests: []
@@ -191,7 +195,7 @@ Meteor.methods({
 	"teams.toggleCoach"(user, team, isCoach) {
 		throw new Meteor.Error("not implement yet");
 	},
-	"games.insert"(teamId) {
+	"games.insert"(teamId, title, date, type) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -203,12 +207,13 @@ Meteor.methods({
 
 		// game schema
 		var gameId = Games.insert({
-			date: moment().valueOf().date,
+			date: date,
 			teamId: teamId,
 			opponent: "unnamed",
-			title: "untitled",
-			type: "",
-			coachId: team.coachId
+			title: title,
+			type: type,
+			coachId: team.coachId,
+			rollCall: []
 		});
 
 		return gameId;
@@ -260,7 +265,7 @@ Meteor.methods({
 				type: String,
 				optional: true
 			},
-			name: {
+			title: {
 				type: String,
 				optional: true
 			}
@@ -327,6 +332,35 @@ Meteor.methods({
 			{
 				$set: {
 					...updates
+				}
+			}
+		);
+	},
+	"games.rsvp"(_id, userId, attending) {
+		new SimpleSchema({
+			_id: {
+				type: String,
+				min: 1
+			},
+			userId: {
+				type: String,
+				min: 1
+			},
+			attending: {
+				type: SimpleSchema.Integer,
+				allowedValues: [YES, NO, MAYBE] // yes, no, maybe
+			}
+		}).validate({
+			_id,
+			userId,
+			attending
+		});
+
+		return Games.update(
+			{ _id, "rollCall.user": userId },
+			{
+				$set: {
+					"rollCall.$.attending": attending
 				}
 			}
 		);

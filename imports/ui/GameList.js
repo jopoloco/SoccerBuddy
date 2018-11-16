@@ -20,25 +20,15 @@ import {
 } from "@material-ui/core";
 
 import GameItem from "./GameItem";
+import GameCreate from "./GameCreate";
 
 export class GameList extends React.Component {
 	state = {
-		checked: [0]
+		modalOpen: false
 	};
 
-	createGame = () => {
-		Meteor.call("games.insert", Session.get("selectedTeamId"), function(
-			err,
-			res
-		) {
-			if (err) {
-				alert(err);
-			}
-
-			if (res) {
-				// ...
-			}
-		});
+	createGame = (res) => {
+		this.setState({ modalOpen: false });
 	};
 
 	render() {
@@ -54,10 +44,12 @@ export class GameList extends React.Component {
 
 		return (
 			<div className="memberList-div">
-				<List className="">
+				<List className="memberList">
 					<ListSubheader className="memberList-header">
 						<Button
-							onClick={this.createGame}
+							onClick={() => {
+								this.setState({ modalOpen: true });
+							}}
 							className="createGame-button"
 						>
 							Create Game
@@ -65,6 +57,10 @@ export class GameList extends React.Component {
 					</ListSubheader>
 					{gamesTable}
 				</List>
+				<GameCreate
+					isOpen={this.state.modalOpen}
+					callback={this.createGame}
+				/>
 			</div>
 		);
 	}

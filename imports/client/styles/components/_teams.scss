@@ -107,6 +107,16 @@
 	}
 }
 
+.teamMenu-item {
+	display: flex;
+	justify-content: space-between;
+	width: 25rem;
+}
+
+.teamMenu-team {
+	width: 100%;
+}
+
 .coachedTeam {
 	color: red;
 }
@@ -129,4 +139,16 @@
 
 .saved-visible {
 	opacity: 1;
+}
+
+.teamMenu {
+	width: 25rem;
+}
+
+.teamMenu-button {
+	@extend .button-sidebarHeader;
+	padding: 10px;
+	flex-basis: 80%;
+	margin: 0px 10px;
+	width: 25rem;
 }

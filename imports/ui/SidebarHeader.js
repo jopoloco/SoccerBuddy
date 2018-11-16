@@ -31,18 +31,48 @@ import {
 	// 	Typography
 } from "@material-ui/core";
 
+const YES = 0;
+const NO = 1;
+const MAYBE = 2;
+
 export class SidebarHeader extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			date: undefined
+			date: undefined,
+			disabled: Session.get("selectedEventId") == undefined
 		};
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		var noGame = Session.get("selectedEventId") == undefined;
+		if (prevState.disabled != noGame) {
+			this.setState({ disabled: noGame });
+		}
 	}
 
 	handleGameClick = (_id, name) => {
 		// do stuff here!
-		Session.set("selectedGameId", _id);
-		Session.set("selectedGameTitle", name);
+		Session.set("selectedEventId", _id);
+		Session.set("selectedEventTitle", name);
+		this.setState({ disabled: false });
+	};
+
+	RSVP = (attending) => {
+		Meteor.call(
+			"games.rsvp",
+			Session.get("selectedEventId"),
+			Meteor.userId(),
+			attending,
+			function(err, res) {
+				if (err) {
+					alert(err);
+				}
+				if (res) {
+					// ...
+				}
+			}
+		);
 	};
 
 	render() {
@@ -56,6 +86,41 @@ export class SidebarHeader extends React.Component {
 						alert("Can't add games from here!");
 					}}
 				/>
+				<div>
+					<Button
+						onClick={() => this.RSVP(YES)}
+						className={
+							this.props.attending == YES
+								? "button button-secondary menu-button attending-button"
+								: "button button-secondary menu-button"
+						}
+						disabled={this.state.disabled}
+					>
+						YES
+					</Button>
+					<Button
+						onClick={() => this.RSVP(NO)}
+						className={
+							this.props.attending == NO
+								? "button button-secondary menu-button attending-button"
+								: "button button-secondary menu-button"
+						}
+						disabled={this.state.disabled}
+					>
+						NO
+					</Button>
+					<Button
+						onClick={() => this.RSVP(MAYBE)}
+						className={
+							this.props.attending == MAYBE
+								? "button button-secondary menu-button attending-button"
+								: "button button-secondary menu-button"
+						}
+						disabled={this.state.disabled}
+					>
+						MAYBE
+					</Button>
+				</div>
 			</div>
 		);
 	}
@@ -63,16 +128,29 @@ export class SidebarHeader extends React.Component {
 
 SidebarHeader.propTypes = {
 	// title: PropTypes.string.isRequired
-	meteorCall: PropTypes.func.isRequired,
+	attending: PropTypes.number.isRequired,
 	Session: PropTypes.object.isRequired,
 	games: PropTypes.array
 };
 
 export default createContainer(() => {
 	Meteor.subscribe("games");
+	var game = Games.findOne({ _id: Session.get("selectedEventId") });
+	var attendingArray = [];
+	var attending = -1;
+
+	if (game && game.rollCall) {
+		attendingArray = game.rollCall.filter((obj) => {
+			return obj.user == Meteor.userId();
+		});
+
+		if (attendingArray.length == 1) {
+			attending = attendingArray[0].attending;
+		}
+	}
+
 	return {
 		// anything returned in here is passed into the component down below
-		meteorCall: Meteor.call,
 		Session,
 		games: Games.find(
 			{ teamId: Session.get("selectedTeamId") },
@@ -81,6 +159,7 @@ export default createContainer(() => {
 					date: 1
 				}
 			}
-		).fetch()
+		).fetch(),
+		attending: attending
 	};
 }, SidebarHeader);

@@ -45,9 +45,9 @@ export class Coach extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.selectedTeamName != this.props.selectedTeamName) {
+		if (prevProps.selectedTeamTitle != this.props.selectedTeamTitle) {
 			this.setState({
-				title: "Manage '" + this.props.selectedTeamName + "'",
+				title: "Manage '" + this.props.selectedTeamTitle + "'",
 				code: "code: " + this.props.selectedTeamId
 			});
 		}
@@ -90,7 +90,7 @@ export class Coach extends React.Component {
 		});
 
 		this.setState({
-			title: "Manage '" + team.name + "'",
+			title: "Manage '" + team.title + "'",
 			code: "code: " + team._id,
 			disabled: false
 		});
@@ -99,7 +99,7 @@ export class Coach extends React.Component {
 			.getElementById("coachDiv")
 			.classList.toggle("coach-hidden", false);
 
-		self.teamNameRef.current.value = team.name;
+		self.teamNameRef.current.value = team.title;
 	}
 
 	onSubmit(e) {
@@ -107,7 +107,7 @@ export class Coach extends React.Component {
 		this.setState({ error: "" });
 
 		var self = this;
-		var teamName = this.teamNameRef.current.value.trim();
+		var teamTitle = this.teamNameRef.current.value.trim();
 		var coach = this.coachRef.current.value.trim();
 		var coachId = this.state.coachId;
 
@@ -128,7 +128,7 @@ export class Coach extends React.Component {
 		// }
 
 		var updates = {
-			name: teamName,
+			title: teamTitle,
 			coachId: coachId
 		};
 
@@ -142,7 +142,7 @@ export class Coach extends React.Component {
 				}
 
 				if (res) {
-					Session.set("selectedTeamName", teamName);
+					Session.set("selectedTeamTitle", teamTitle);
 				}
 			}
 		);
@@ -168,7 +168,7 @@ export class Coach extends React.Component {
 
 		if (type == TEAM) {
 			Session.set("selectedTeamId", undefined);
-			Session.set("selectedTeamName", undefined);
+			Session.set("selectedTeamTitle", undefined);
 			Meteor.call("teams.remove", id);
 		}
 	};
@@ -254,12 +254,12 @@ export class Coach extends React.Component {
 
 Coach.propTypes = {
 	selectedTeamId: PropTypes.string,
-	selectedTeamName: PropTypes.string
+	selectedTeamTitle: PropTypes.string
 };
 
 export default createContainer(() => {
 	return {
 		selectedTeamId: Session.get("selectedTeamId"),
-		selectedTeamName: Session.get("selectedTeamName")
+		selectedTeamTitle: Session.get("selectedTeamTitle")
 	};
 }, Coach);

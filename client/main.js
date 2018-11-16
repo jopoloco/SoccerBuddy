@@ -49,9 +49,9 @@ Meteor.startup(() => {
 	// Session.set('showVisible', true);
 	console.log("meteor startup...");
 	Session.set("selectedTeamId", undefined);
-	Session.set("selectedTeamName", undefined);
-	Session.set("selectedGameId", undefined);
-	Session.set("selectedGameTitle", undefined);
+	Session.set("selectedTeamTitle", undefined);
+	Session.set("selectedEventId", undefined);
+	Session.set("selectedEventTitle", undefined);
 	Session.set("isNavOpen", false);
 	ReactDOM.render(AppRouter, document.getElementById("app"));
 	console.log("trying to call twilio startup");
