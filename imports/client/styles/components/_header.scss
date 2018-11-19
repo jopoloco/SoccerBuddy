@@ -41,6 +41,17 @@
 	text-decoration: underline;
 }
 
+.headerLinkButton-dead {
+	background: transparent;
+	border: none;
+	color: $dark-grey;
+	cursor: default;
+	font-size: $base-font-size;
+	margin: 0 10px;
+	padding: 0;
+	text-decoration: none;
+}
+
 .uniqueHeading {
 	flex-basis: 40%;
 	flex-shrink: 0;

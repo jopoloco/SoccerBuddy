@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router";
+import { Meteor } from "meteor/meteor";
 import PropTypes from "prop-types";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
@@ -8,8 +8,15 @@ import { Link } from "react-router-dom";
 
 import TeamSelect from "./TeamSelect";
 
+import { Teams } from "../api/teams";
+
 export const PrivateHeader = (props) => {
 	var navImageSrc = props.isNavOpen ? "/images/x.svg" : "/images/bars.svg";
+
+	function deadClick(e) {
+		e.preventDefault();
+	}
+
 	return (
 		<div className="header">
 			<div className="header_content">
@@ -29,9 +36,19 @@ export const PrivateHeader = (props) => {
 					{/* <Link className="headerLinkButton" to="/teams">
 						Teams
 					</Link> */}
-					<Link className="headerLinkButton" to="/coach">
-						Coach
-					</Link>
+					{props.coachId == Meteor.userId() ? (
+						<Link className="headerLinkButton" to="/coach">
+							Coach
+						</Link>
+					) : (
+						<Link
+							className="headerLinkButton-dead"
+							onClick={deadClick}
+							to="/coach"
+						>
+							Coach
+						</Link>
+					)}
 					<Link className="headerLinkButton" to="/forum">
 						Forum
 					</Link>
@@ -60,15 +77,20 @@ PrivateHeader.propTypes = {
 	title: PropTypes.string.isRequired,
 	handleLogout: PropTypes.func.isRequired,
 	handleNavClick: PropTypes.func.isRequired,
-	isNavOpen: PropTypes.bool.isRequired
+	isNavOpen: PropTypes.bool.isRequired,
+	coachId: PropTypes.string
 };
 
 export default createContainer(() => {
+	Meteor.subscribe("teams");
+	var team = Teams.findOne({ _id: Session.get("selectedTeamId") });
+	var coachId = team ? team.coachId : undefined;
 	return {
 		// anything returned in here is passed into the component down below
 		handleLogout,
 		handleNavClick,
-		isNavOpen: Session.get("isNavOpen")
+		isNavOpen: Session.get("isNavOpen"),
+		coachId: coachId
 	};
 }, PrivateHeader);
 

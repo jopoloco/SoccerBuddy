@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
 import { Teams } from "../api/teams";
+import { history } from "../routes/AppRouter";
 
 import ConfirmDelete from "./ConfirmDelete";
 import MemberList from "./MemberList";
@@ -75,6 +76,10 @@ export class Coach extends React.Component {
 				.classList.toggle("coach-hidden", true);
 
 			return;
+		}
+
+		if (team.coachId != Meteor.userId()) {
+			history.push("/dashboard");
 		}
 
 		Meteor.call("users.findById", team.coachId, function(err, res) {
