@@ -64,6 +64,14 @@ export class DropDownMenu extends React.Component {
 		) {
 			this.setState({ disabled: this.props.source.length <= 0 });
 		}
+
+		if (this.state.index == -1 && this.props.selectedId) {
+			this.props.source.map((item, i) => {
+				if (item._id == this.props.selectedId) {
+					this.setState({ index: i });
+				}
+			});
+		}
 	}
 
 	render() {

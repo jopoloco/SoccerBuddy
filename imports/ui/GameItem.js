@@ -1,4 +1,5 @@
 import React from "react";
+import { history } from "../routes/AppRouter";
 import { Meteor } from "meteor/meteor";
 import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
@@ -22,6 +23,7 @@ import ConfirmDelete from "./ConfirmDelete";
 
 export class GameItem extends React.Component {
 	state = {
+		id: "",
 		title: "Untitled",
 		type: "N/A",
 		date: "N/A",
@@ -54,6 +56,10 @@ export class GameItem extends React.Component {
 
 		if (this.state.date != game.date) {
 			this.setState({ date: game.date });
+		}
+
+		if (this.state.id != game._id) {
+			this.setState({ id: game._id });
 		}
 	}
 
@@ -116,7 +122,9 @@ export class GameItem extends React.Component {
 					<IconButton
 						aria-label="Edit"
 						className="editGame"
-						onClick={() => alert("edit game")}
+						onClick={() =>
+							history.push("/edit/game/" + this.state.id)
+						}
 					>
 						<Edit />
 					</IconButton>

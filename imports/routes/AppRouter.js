@@ -20,10 +20,17 @@ import Account from "../ui/Account";
 import Coach from "../ui/Coach";
 import Forum from "../ui/Forum";
 import TeamSelect from "../ui/TeamSelect";
+import EditGame from "../ui/EditGame";
 import Page from "../ui/Page";
 
 const unauthenticatedPages = ["/", "/signup"];
-const authenticatedPages = ["/dashboard", "/account", "/coach", "/forum"];
+const authenticatedPages = [
+	"/dashboard",
+	"/account",
+	"/coach",
+	"/forum",
+	"/edit/game"
+];
 export const history = createBrowserHistory();
 
 const styleNode = document.createComment("insertion-point-jss");
@@ -57,6 +64,16 @@ function onEnterNotePage(props, Component) {
 	} else {
 		Session.set("selectedNoteId", props.match.params.id);
 		return <Component />;
+	}
+}
+
+function onEnterEditGame(props, Component) {
+	if (!Meteor.userId()) {
+		// ...
+		return <Redirect to="/" />;
+	} else {
+		Session.set("selectedEventId", props.match.params.id);
+		return <Page component={Component} />;
 	}
 }
 
@@ -119,6 +136,11 @@ export const AppRouter = (
 						exact
 						path="/forum"
 						render={() => onEnter(false, Forum)}
+					/>
+					<Route
+						exact
+						path="/edit/game/:id"
+						render={(props) => onEnterEditGame(props, EditGame)}
 					/>
 					<Route component={NotFound} />
 				</Switch>

@@ -82,6 +82,7 @@ export class SidebarHeader extends React.Component {
 					source={this.props.games}
 					item="Game"
 					onClickEvent={this.handleGameClick}
+					selectedId={Session.get("selectedEventId")}
 					onAddEvent={() => {
 						alert("Can't add games from here!");
 					}}

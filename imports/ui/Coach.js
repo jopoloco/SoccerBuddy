@@ -33,7 +33,7 @@ export class Coach extends React.Component {
 			code: "---",
 			coachId: undefined,
 			deleteModalOpen: false,
-			deleteType: "member",
+			deleteType: TEAM,
 			deleteId: undefined,
 			disabled: true
 		};
@@ -42,25 +42,23 @@ export class Coach extends React.Component {
 	}
 
 	componentDidMount() {
-		this.updateComponent(this.props.selectedTeamId, this);
+		this.updateComponent(this.props.team, this);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.selectedTeamTitle != this.props.selectedTeamTitle) {
-			this.setState({
-				title: "Manage '" + this.props.selectedTeamTitle + "'",
-				code: "code: " + this.props.selectedTeamId
-			});
-		}
+		// if (prevProps.selectedTeamTitle != this.props.selectedTeamTitle) {
+		// 	this.setState({
+		// 		title: "Manage '" + this.props.selectedTeamTitle + "'",
+		// 		code: "code: " + this.props.selectedTeamId
+		// 	});
+		// }
 
-		if (prevProps.selectedTeamId != this.props.selectedTeamId) {
-			this.updateComponent(this.props.selectedTeamId, this);
+		if (prevProps.team != this.props.team) {
+			this.updateComponent(this.props.team, this);
 		}
 	}
 
-	updateComponent(teamId, self) {
-		var team = Teams.findOne({ _id: this.props.selectedTeamId });
-
+	updateComponent(team, self) {
 		if (!team) {
 			self.coachRef.current.value = null;
 			self.teamNameRef.current.value = null;
@@ -139,7 +137,7 @@ export class Coach extends React.Component {
 
 		Meteor.call(
 			"teams.update",
-			self.props.selectedTeamId,
+			Session.get("selectedTeamId"),
 			updates,
 			function(err, res) {
 				if (err) {
@@ -258,13 +256,11 @@ export class Coach extends React.Component {
 }
 
 Coach.propTypes = {
-	selectedTeamId: PropTypes.string,
-	selectedTeamTitle: PropTypes.string
+	team: PropTypes.object
 };
 
 export default createContainer(() => {
 	return {
-		selectedTeamId: Session.get("selectedTeamId"),
-		selectedTeamTitle: Session.get("selectedTeamTitle")
+		team: Teams.findOne({ _id: Session.get("selectedTeamId") })
 	};
 }, Coach);
