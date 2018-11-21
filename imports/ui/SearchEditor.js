@@ -79,6 +79,7 @@ export class SearchEditor extends React.Component {
 					<TextField
 						id="title"
 						label="Title"
+						variant="outlined"
 						InputLabelProps={{
 							classes: {
 								root: "editor-title-label"
@@ -96,6 +97,7 @@ export class SearchEditor extends React.Component {
 					<TextField
 						id="price"
 						label="Price"
+						variant="outlined"
 						InputLabelProps={{
 							classes: {
 								root: "editor-textfield-label"

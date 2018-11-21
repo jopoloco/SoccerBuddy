@@ -21,6 +21,7 @@ import Coach from "../ui/Coach";
 import Forum from "../ui/Forum";
 import TeamSelect from "../ui/TeamSelect";
 import EditGame from "../ui/EditGame";
+import Admin from "../ui/Admin";
 import Page from "../ui/Page";
 
 const unauthenticatedPages = ["/", "/signup"];
@@ -68,7 +69,7 @@ function onEnterNotePage(props, Component) {
 }
 
 function onEnterEditGame(props, Component) {
-	if (!Meteor.userId()) {
+	if (!Meteor.userId() || !Session.get("selectedTeamId")) {
 		// ...
 		return <Redirect to="/" />;
 	} else {

@@ -14,6 +14,8 @@ export default (customTheme = createMuiTheme({
 		danger: "orange"
 	},
 	typography: {
+		useNextVariants: true,
+		fontSize: 25,
 		headline: {
 			fontSize: 27,
 			flexBasis: "50%",
@@ -21,7 +23,7 @@ export default (customTheme = createMuiTheme({
 			color: "black",
 			fontWeight: "400"
 		},
-		subheading: {
+		subtitle1: {
 			fontSize: 16,
 			color: "black"
 		},

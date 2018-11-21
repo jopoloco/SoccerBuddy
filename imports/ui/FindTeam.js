@@ -174,6 +174,7 @@ export class FindTeam extends React.Component {
 								id="createName"
 								label="Team Name"
 								className="existingTeam-searchName addTeamItem"
+								variant="outlined"
 								InputLabelProps={{
 									classes: {
 										root: "existingTeam-input-label"

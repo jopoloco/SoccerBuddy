@@ -6,7 +6,7 @@ import { Session } from "meteor/session";
 
 import {
 	// Edit
-	// 	ExpandMore,
+	ExpandMore,
 	// 	Save,
 	Delete,
 	// 	Cancel,
@@ -150,6 +150,7 @@ export class TeamMenu extends React.Component {
 				{Session.get("selectedTeamTitle") == undefined
 					? "Select a team"
 					: Session.get("selectedTeamTitle")}
+				<ExpandMore className="icon-right" />
 			</Button>
 		);
 

@@ -93,7 +93,7 @@ export default class GameCreate extends React.Component {
 	};
 
 	render() {
-		var ProjectModal = (
+		var GameCreateModal = (
 			<Modal
 				// onClose={handleModalClose.bind(this)} // leaving this commented so you can only exit via buttons
 				open={this.state.modalOpen}
@@ -105,6 +105,7 @@ export default class GameCreate extends React.Component {
 					<TextField
 						id="title"
 						label="Title"
+						variant="outlined"
 						InputLabelProps={{
 							classes: {
 								root: "editor-title-label"
@@ -123,6 +124,7 @@ export default class GameCreate extends React.Component {
 						id="date"
 						label="Date"
 						type="date"
+						variant="outlined"
 						InputLabelProps={{
 							classes: {
 								root: "editor-title-label"
@@ -167,7 +169,7 @@ export default class GameCreate extends React.Component {
 			</Modal>
 		);
 
-		return <div>{ProjectModal}</div>;
+		return <div>{GameCreateModal}</div>;
 	}
 }
 

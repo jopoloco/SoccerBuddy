@@ -40,12 +40,12 @@ export class SidebarHeader extends React.Component {
 		super(props);
 		this.state = {
 			date: undefined,
-			disabled: Session.get("selectedEventId") == undefined
+			disabled: this.props.eventId == undefined
 		};
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		var noGame = Session.get("selectedEventId") == undefined;
+		var noGame = this.props.eventId == undefined;
 		if (prevState.disabled != noGame) {
 			this.setState({ disabled: noGame });
 		}
@@ -61,7 +61,7 @@ export class SidebarHeader extends React.Component {
 	RSVP = (attending) => {
 		Meteor.call(
 			"games.rsvp",
-			Session.get("selectedEventId"),
+			this.props.eventId,
 			Meteor.userId(),
 			attending,
 			function(err, res) {
@@ -82,7 +82,7 @@ export class SidebarHeader extends React.Component {
 					source={this.props.games}
 					item="Game"
 					onClickEvent={this.handleGameClick}
-					selectedId={Session.get("selectedEventId")}
+					selectedId={this.props.eventId}
 					onAddEvent={() => {
 						alert("Can't add games from here!");
 					}}
@@ -130,8 +130,8 @@ export class SidebarHeader extends React.Component {
 SidebarHeader.propTypes = {
 	// title: PropTypes.string.isRequired
 	attending: PropTypes.number.isRequired,
-	Session: PropTypes.object.isRequired,
-	games: PropTypes.array
+	games: PropTypes.array,
+	eventId: PropTypes.string
 };
 
 export default createContainer(() => {
@@ -161,6 +161,7 @@ export default createContainer(() => {
 				}
 			}
 		).fetch(),
-		attending: attending
+		attending: attending,
+		eventId: Session.get("selectedEventId")
 	};
 }, SidebarHeader);

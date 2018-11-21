@@ -45,6 +45,11 @@
 	font-size: $middle-font-size;
 }
 
+.icon-right {
+	margin-left: $space;
+	font-size: $middle-font-size;
+}
+
 .icon-large {
 	font-size: $large-font-size;
 }
@@ -62,6 +67,7 @@
 .dropdown-newitem {
 	background: $color-secondary;
 	font-style: italic;
+	font-size: $base-font-size;
 }
 
 .createGame-button {

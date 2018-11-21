@@ -1,0 +1,101 @@
+// .editGame-page {
+// 	border: 3px black solid;
+// 	display: flex;
+// 	flex-direction: row;
+// 	padding: 20px;
+// 	background: white;
+// }
+
+.editGame-menu-div {
+	background-color: white;
+	border: 1px solid $grey;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.editGame-editor-div {
+	align-items: center;
+	background-color: white;
+	border: 1px solid $grey;
+	display: flex;
+	flex-direction: column;
+	padding: $large-space;
+	width: 100%;
+}
+
+.editGame-title-div {
+	background-color: $color-background;
+	border: 3px black solid;
+	color: white;
+	text-align: center;
+	width: 100%;
+}
+
+.editGame-body-div {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	width: 100%;
+}
+
+.editGame-memberList-div {
+	border: 3px black solid;
+	flex-basis: 40%;
+	margin: 20px 10px 0px 0px;
+	padding: 20px;
+}
+
+.editGame-rsvp-div {
+	border: 3px black solid;
+	flex-basis: 60%;
+	margin: 20px 0px 0px 10px;
+	padding: 20px;
+}
+
+.editGame-details-div {
+	align-items: center;
+	border: 3px black solid;
+	display: flex;
+	flex-direction: column;
+	margin: 20px;
+	padding: 20px;
+	width: 100%;
+}
+
+.gameEdit-editor-title-label {
+	font-size: $large-font-size;
+}
+
+.gameEdit-editor-title-input {
+	font-size: $large-font-size;
+	line-height: $large-font-size;
+}
+
+.gameEdit-textfield {
+	width: 50%;
+}
+
+.gameEdit-type {
+	border: 1px solid rgba(0, 0, 0, 0.23);
+	border-radius: 4px;
+	margin: 15px;
+	padding: 10px 0px 10px 0px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-evenly;
+	width: 50%;
+}
+
+.gameEdit-save {
+	width: 50%;
+}
+
+.gameEdit-button {
+	background-color: $color-primary;
+	color: white;
+	margin: 0px;
+	width: 100%;
+}

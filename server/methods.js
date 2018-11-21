@@ -295,7 +295,7 @@ Meteor.methods({
 			}
 		);
 	},
-	"games.update"(_id, updates) {
+	"games.update"(_id, coachId, updates) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -321,6 +321,14 @@ Meteor.methods({
 			date: {
 				type: String,
 				optional: true
+			},
+			type: {
+				type: String,
+				optional: true
+			},
+			title: {
+				type: String,
+				optional: true
 			}
 		}).validate({
 			_id,
@@ -328,7 +336,7 @@ Meteor.methods({
 		});
 
 		return Games.update(
-			{ _id, coachId: this.userId },
+			{ _id, coachId },
 			{
 				$set: {
 					...updates

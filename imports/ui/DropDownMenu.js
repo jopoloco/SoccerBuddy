@@ -6,7 +6,7 @@ import { Session } from "meteor/session";
 
 import {
 	// Edit
-	// 	ExpandMore,
+	ExpandMore,
 	// 	Save,
 	// 	Delete,
 	// 	Cancel,
@@ -57,10 +57,18 @@ export class DropDownMenu extends React.Component {
 		this.setState({ anchorEl: null });
 	};
 
+	componentDidMount() {
+		this.updateComponent(this.state.disabled);
+	}
+
 	componentDidUpdate(prevProps, prevState) {
+		this.updateComponent(prevState.disabled);
+	}
+
+	updateComponent(disabled) {
 		if (
 			this.props.item != "Team" &&
-			prevState.disabled != this.props.source.length <= 0
+			disabled != this.props.source.length <= 0
 		) {
 			this.setState({ disabled: this.props.source.length <= 0 });
 		}
@@ -141,6 +149,7 @@ export class DropDownMenu extends React.Component {
 					: this.state.index == -1
 						? "Select a " + this.props.item
 						: this.props.source[this.state.index].title}
+				<ExpandMore className="icon-right" />
 			</Button>
 		);
 
