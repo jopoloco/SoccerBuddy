@@ -3,6 +3,15 @@
 	overflow: auto;
 }
 
+.coach-box {
+	background-color: $boxedView-bg;
+	border: 1px solid $boxedView-border-color;
+	padding: 2.4rem;
+	text-align: center;
+	width: $coach-div-width;
+	min-width: 25rem;
+}
+
 .coach-hidden {
 	display: none;
 }
@@ -43,8 +52,10 @@
 }
 
 .memberList-item {
+	border: 1px solid $grey;
 	font-size: $base-font-size;
 	margin: 10px;
+	width: auto;
 }
 
 .memberList-item-empty {

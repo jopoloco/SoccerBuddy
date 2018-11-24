@@ -364,13 +364,25 @@ Meteor.methods({
 			attending
 		});
 
-		return Games.update(
-			{ _id, "rollCall.user": userId },
+		var ret = Games.update(
+			{ _id },
 			{
-				$set: {
-					"rollCall.$.attending": attending
+				$pull: {
+					rollCall: { user: userId }
 				}
 			}
+		);
+
+		return (
+			ret +
+			Games.update(
+				{ _id },
+				{
+					$push: {
+						rollCall: { user: userId, attending: attending }
+					}
+				}
+			)
 		);
 	},
 	async "games.compile"(searchId) {

@@ -1,10 +1,33 @@
-// .editGame-page {
-// 	border: 3px black solid;
-// 	display: flex;
-// 	flex-direction: row;
-// 	padding: 20px;
-// 	background: white;
-// }
+.editGame-page {
+	border: 3px black solid;
+	display: flex;
+	flex-direction: column;
+	background: white;
+	height: $editGame-height;
+	width: 100%;
+	margin: 0 auto;
+	padding: 20px;
+	// position: absolute;
+	// top: calc((100vh - #{$editGame-height}) / 2);
+
+	@include desktop() {
+		margin: $large-space auto;
+		padding: 0px;
+		width: $editGame-width;
+		// left: calc((100vw - #{$editGame-width}) / 2);
+	}
+}
+
+.editGame-header {
+	background-color: $color-primary;
+	width: 100%;
+}
+
+.editGame-main {
+	display: flex;
+	height: 100%;
+	width: 100%;
+}
 
 .editGame-menu-div {
 	background-color: white;
@@ -18,7 +41,7 @@
 .editGame-editor-div {
 	align-items: center;
 	background-color: white;
-	border: 1px solid $grey;
+	// border: 1px solid $grey;
 	display: flex;
 	flex-direction: column;
 	padding: $large-space;
@@ -42,9 +65,10 @@
 
 .editGame-memberList-div {
 	border: 3px black solid;
-	flex-basis: 40%;
-	margin: 20px 10px 0px 0px;
+	overflow-y: auto;
+	margin: 20px 0px 0px 0px;
 	padding: 20px;
+	width: 100%;
 }
 
 .editGame-rsvp-div {
@@ -59,7 +83,7 @@
 	border: 3px black solid;
 	display: flex;
 	flex-direction: column;
-	margin: 20px;
+	margin-top: 20px;
 	padding: 20px;
 	width: 100%;
 }

@@ -7,19 +7,29 @@ import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
 import { Delete, Save } from "@material-ui/icons";
-import { Button, TextField } from "@material-ui/core";
+import {
+	AppBar,
+	Button,
+	Tabs,
+	Tab,
+	TabContainer,
+	TextField
+} from "@material-ui/core";
 
 import { Games } from "../api/games";
 import Admin from "./Admin";
 import RSVPList from "./RSVPList";
 import Formation from "./Formation";
 
+const COMPS = [Admin, RSVPList, Formation];
+
 export class EditGame extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			title: "Undefined",
-			component: Admin
+			component: Admin,
+			tab: 0
 		};
 	}
 
@@ -31,6 +41,10 @@ export class EditGame extends React.Component {
 			this.setState({ title: this.props.game.title });
 		}
 	}
+
+	handleTabChange = (event, value) => {
+		this.setState({ tab: value, component: COMPS[value] });
+	};
 
 	render() {
 		var menu = (
@@ -63,9 +77,22 @@ export class EditGame extends React.Component {
 		);
 
 		return (
-			<div className="pageContent">
-				{menu}
-				<div className="pageContent-main">
+			<div className="editGame-page">
+				{/* {menu} */}
+				<AppBar position="static" className="editGame-header">
+					<Tabs
+						value={this.state.tab}
+						onChange={this.handleTabChange}
+					>
+						<Tab label="Item One" />
+						<Tab label="Item Two" />
+						<Tab label="Item Three" />
+					</Tabs>
+				</AppBar>
+				{/* {this.state.tab === 0 && <TabContainer>Item One</TabContainer>}
+				{this.state.tab === 1 && <TabContainer>Item Two</TabContainer>}
+				{this.state.tab === 2 && <TabContainer>Item Three</TabContainer>} */}
+				<div className="editGame-main">
 					<this.state.component />
 				</div>
 			</div>

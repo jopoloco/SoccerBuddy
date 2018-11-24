@@ -74,6 +74,10 @@ $create-modal-width: 550px;
 $team-modal-height: 400px;
 $team-modal-width: 600px;
 
+// edit game modal
+$editGame-height: calc(90vh - #{$header-height});
+$editGame-width: 80%;
+
 // page content
 $sidebar-width: 40rem;
 $main-width: calc(#{$site-max-width} - #{$sidebar-width});
@@ -82,3 +86,4 @@ $pageContent-height: calc(
 ); // vh is percent of veiwport
 $card-grid-min-width: 27.5rem;
 $coach-div-height: calc(75vh - #{$header-height});
+$coach-div-width: 80%;

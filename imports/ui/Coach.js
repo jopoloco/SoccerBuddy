@@ -179,7 +179,7 @@ export class Coach extends React.Component {
 	render() {
 		return (
 			<div className="boxedView">
-				<div className="boxedView_box">
+				<div className="coach-box">
 					<h1>{this.state.title}</h1>
 					<h2>{this.state.code}</h2>
 
