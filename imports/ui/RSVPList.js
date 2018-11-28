@@ -6,7 +6,17 @@ import PropTypes from "prop-types";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
-import { Delete, Save, Comment, FilterList } from "@material-ui/icons";
+import {
+	Delete,
+	Save,
+	CheckBox,
+	CheckBoxOutlineBlank,
+	Comment,
+	FilterList,
+	BluetoothDisabled,
+	Sms,
+	Mail
+} from "@material-ui/icons";
 import {
 	Button,
 	Checkbox,
@@ -17,41 +27,35 @@ import {
 	ListSubheader,
 	ListItemSecondaryAction,
 	ListItemText,
+	Switch,
 	Table,
 	TableBody,
 	TableRow,
 	TableCell,
 	TableSortLabel,
 	TableHead,
+	TextField,
 	Toolbar,
 	Tooltip,
 	Typography
 } from "@material-ui/core";
 
 import { Games } from "../api/games";
+import { Teams } from "../api/teams";
 
-const rows = [
-	{
-		id: "name",
-		numeric: false,
-		disablePadding: true,
-		label: "Dessert (100g serving)"
-	},
-	{ id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-	{ id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-	{ id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-	{
-		id: "protein",
-		numeric: true,
-		disablePadding: false,
-		label: "Protein (g)"
-	}
+const ROWS = [
+	{ id: "name", disablePadding: false, label: "Player" },
+	{ id: "attending", disablePadding: false, label: "Attending?" }
 ];
 
-let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
-	counter += 1;
-	return { id: counter, name, calories, fat, carbs, protein };
+const ATTENDING = ["Yes", "No", "Maybe"];
+
+const REQUEST = "Please reply with either YES, NO, or MAYBE";
+
+// var counter = 0;
+function createData(_id, name, attending, phoneNumber, email) {
+	// counter += 1;
+	return { id: _id, name, attending, phoneNumber, email };
 }
 
 function desc(a, b, orderBy) {
@@ -106,7 +110,7 @@ class EnhancedTableHead extends React.Component {
 							onChange={onSelectAllClick}
 						/>
 					</TableCell>
-					{rows.map((row) => {
+					{ROWS.map((row) => {
 						return (
 							<TableCell
 								key={row.id}
@@ -119,7 +123,10 @@ class EnhancedTableHead extends React.Component {
 								}
 							>
 								<Tooltip
-									title="Sort"
+									title={("Sort by " + row.label).replace(
+										"?",
+										""
+									)}
 									placement={
 										row.numeric
 											? "bottom-end"
@@ -154,43 +161,42 @@ EnhancedTableHead.propTypes = {
 };
 
 let EnhancedTableToolbar = (props) => {
-	const { numSelected } = props;
+	const { selected, callback } = props;
 
 	return (
 		<Toolbar className="rsvp-toolbar">
 			<div className="rsvp-toolbar-div">
-				{numSelected > 0 ? (
+				{selected.length > 0 ? (
 					<Typography color="inherit" variant="subtitle1">
-						{numSelected} selected
+						{selected.length} selected
 					</Typography>
 				) : (
 					<Typography variant="h6" id="tableTitle">
-						Nutrition
+						Rollcall
 					</Typography>
 				)}
 			</div>
 			<div className="spacer" />
-			<div className="actions">
-				{numSelected > 0 ? (
-					<Tooltip title="Delete">
-						<IconButton aria-label="Delete">
-							<Delete />
+			{/* <div className="actions">
+				<Tooltip title="Swap between email and sms">
+					<div>
+						<IconButton
+							aria-label="Sms"
+							disabled={selected.length <= 0}
+							onClick={callback}
+						>
+							<Sms />
 						</IconButton>
-					</Tooltip>
-				) : (
-					<Tooltip title="Filter list">
-						<IconButton aria-label="Filter list">
-							<FilterList />
-						</IconButton>
-					</Tooltip>
-				)}
-			</div>
+					</div>
+				</Tooltip>
+			</div> */}
 		</Toolbar>
 	);
 };
 
 EnhancedTableToolbar.propTypes = {
-	numSelected: PropTypes.number.isRequired
+	selected: PropTypes.array.isRequired,
+	callback: PropTypes.func.isRequired
 };
 
 export class RSVPList extends React.Component {
@@ -202,39 +208,28 @@ export class RSVPList extends React.Component {
 			selected: [],
 			order: "asc",
 			orderBy: "calories",
-			data: [
-				createData("Cupcake", 305, 3.7, 67, 4.3),
-				createData("Donut", 452, 25.0, 51, 4.9),
-				createData("Eclair", 262, 16.0, 24, 6.0),
-				createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-				createData("Gingerbread", 356, 16.0, 49, 3.9),
-				createData("Honeycomb", 408, 3.2, 87, 6.5),
-				createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-				createData("Jelly Bean", 375, 0.0, 94, 0.0),
-				createData("KitKat", 518, 26.0, 65, 7.0),
-				createData("Lollipop", 392, 0.2, 98, 0.0),
-				createData("Marshmallow", 318, 0, 81, 2.0),
-				createData("Nougat", 360, 19.0, 9, 37.0),
-				createData("Oreo", 437, 18.0, 63, 4.0)
-			]
+			data: [],
+			rsvpIsSMS: false,
+			smsMessage: "",
+			emailMessage: ""
 		};
 	}
 
-	handleToggle = (value) => () => {
-		const { checked } = this.state;
-		const currentIndex = checked.indexOf(value);
-		const newChecked = [...checked];
+	// handleToggle = (value) => () => {
+	// 	const { checked } = this.state;
+	// 	const currentIndex = checked.indexOf(value);
+	// 	const newChecked = [...checked];
 
-		if (currentIndex === -1) {
-			newChecked.push(value);
-		} else {
-			newChecked.splice(currentIndex, 1);
-		}
+	// 	if (currentIndex === -1) {
+	// 		newChecked.push(value);
+	// 	} else {
+	// 		newChecked.splice(currentIndex, 1);
+	// 	}
 
-		this.setState({
-			checked: newChecked
-		});
-	};
+	// 	this.setState({
+	// 		checked: newChecked
+	// 	});
+	// };
 
 	handleRequestSort = (event, property) => {
 		const orderBy = property;
@@ -284,13 +279,281 @@ export class RSVPList extends React.Component {
 		// var self = this;
 		// var userId = Meteor.userId();
 
-		if (this.props.game) {
-			this.setState({ title: this.props.game.title });
+		this.updateComponent();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (
+			this.props.game != prevProps.game ||
+			this.props.members != prevProps.members
+		) {
+			this.updateComponent();
 		}
 	}
 
+	updateComponent() {
+		if (this.props.game) {
+			this.setState({ title: this.props.game.title });
+		}
+
+		if (this.props.members && this.props.members.length > 0) {
+			var self = this;
+			Meteor.call("users.findUsersById", this.props.members, function(
+				err,
+				res
+			) {
+				if (err) {
+					alert(err);
+				}
+
+				if (res) {
+					var data = res.map((user, i) => {
+						var name = user.fName + " " + user.lName;
+						var attending = 2;
+						var phoneNumber = user.phoneNumber;
+						var email =
+							user.emails.length > 0
+								? user.emails[0].address
+								: null;
+						self.props.game.rollCall.some(function(obj) {
+							if (obj.user == user._id) {
+								attending = obj.attending;
+								return true;
+							}
+						});
+
+						return createData(
+							user._id,
+							name,
+							attending,
+							phoneNumber,
+							email
+						);
+					});
+					self.setState({ data: data });
+				}
+			});
+		}
+	}
+
+	sendRSVPRequest = () => {
+		const {
+			data,
+			selected,
+			smsMessage,
+			emailMessage,
+			rsvpIsSMS
+		} = this.state;
+		var self = this;
+
+		if (selected.length <= 0) {
+			alert("No users selected!");
+			return;
+		}
+
+		var list = selected.map((el, i) => {
+			var user = data.filter((obj) => {
+				return obj.id == el;
+			})[0];
+			return {
+				name: user.name,
+				phoneNumber: user.phoneNumber,
+				email: user.email
+			};
+		});
+
+		for (var i = 0; i < list.length; i++) {
+			var { name, phoneNumber, email } = list[i];
+			var msg = "";
+			if (rsvpIsSMS) {
+				if (smsMessage == "") {
+					var g = this.props.game;
+					msg =
+						"Hello, " +
+						name +
+						"! Your coach has requested you RSVP for the ";
+					msg = msg + g.type + " '" + g.title + "' on " + g.date;
+					msg =
+						msg +
+						". Please reply with either YES, NO, or MAYBE to this text. Thanks!";
+				} else {
+					msg = smsMessage; // + "; " + REQUEST;
+				}
+				Meteor.call("sms.send", msg, phoneNumber, function(err, res) {
+					if (err) {
+						alert(err);
+					}
+					if (res) {
+						console.log("success!");
+						Meteor.call(
+							"requests.insert",
+							res.phoneNumber,
+							self.props.game._id,
+							function(err, res) {
+								if (err) {
+									alert(err);
+								}
+								if (res) {
+									console.log(res);
+								}
+							}
+						);
+					}
+				});
+			} else {
+				Meteor.call("email.send", emailMessage, email, function(
+					err,
+					res
+				) {
+					if (err) {
+						alert(err);
+					}
+					if (res) {
+						console.log("success!");
+					}
+				});
+			}
+		}
+	};
+
+	handleSwitchChange = (event) => {
+		var checked = event.target.checked;
+		var sn = document.getElementById("requestNotification");
+		sn.classList.toggle("request-visible", checked);
+
+		this.setState({ rsvpIsSMS: checked });
+	};
+
+	handleMessageChange = (event) => {
+		var msg = event.target.value;
+		if (this.state.rsvpIsSMS) {
+			if (msg.length > 160) {
+				// TODO
+				// ... set error
+			}
+
+			this.setState({ smsMessage: msg });
+		} else {
+			this.setState({ emailMessage: msg });
+		}
+	};
+
 	render() {
 		const { data, order, orderBy, selected } = this.state;
+
+		var rsvpToggle = (
+			<div className="rsvp-type-toggle">
+				<Tooltip title="Swap between email and sms">
+					<FormControlLabel
+						value="email"
+						label="Email"
+						labelPlacement="start"
+						control={
+							<FormControlLabel
+								value="sms"
+								control={
+									<Switch
+										checked={this.state.rsvpIsSMS}
+										onChange={this.handleSwitchChange}
+										value="rsvpType"
+										classes={{
+											bar: this.state.rsvpIsSMS
+												? "rsvp-toggle-barChecked"
+												: "rsvp-toggle-bar",
+											icon: "rsvp-toggle-icon",
+											iconChecked:
+												"rsvp-toggle-iconChecked"
+										}}
+									/>
+								}
+								label="SMS"
+								labelPlacement="end"
+								classes={{
+									label: "formControl-right"
+								}}
+								// onChange={this.handleSwitchChange}
+							/>
+						}
+						classes={{
+							label: "formControl-left"
+						}}
+						// onChange={this.handleSwitchChange}
+					/>
+					{/* <div>
+			<IconButton
+				aria-label="Sms"
+				disabled={selected.length <= 0}
+				onClick={callback}
+			>
+				<Sms />
+			</IconButton>
+		</div> */}
+				</Tooltip>
+			</div>
+		);
+
+		var requestNotification = (
+			<div id="requestNotification" className="request">
+				<span>
+					*Please note*: Leave the msg blank to send a request.
+				</span>
+				<br />
+				<span>Only the last request sent to a member is valid.</span>
+				{/* <span style={{ color: "black" }}>&quot;{REQUEST}&quot;</span> */}
+			</div>
+		);
+
+		var rsvpArea = (
+			<div className="editGame-rsvp-div">
+				<div className="rsvp-message-header">
+					<span>Compose RSVP Message</span>
+					{rsvpToggle}
+				</div>
+				<div className="editGame-rsvp-message-div">
+					{requestNotification}
+					<TextField
+						id="standard-multiline-static"
+						label={
+							this.state.rsvpIsSMS
+								? "RSVP SMS Message"
+								: "RSVP Email Message"
+						}
+						multiline
+						rows="10"
+						className="rsvp-message"
+						margin="normal"
+						variant="outlined"
+						InputLabelProps={{
+							classes: {
+								root: "gameEdit-editor-title-label"
+							}
+						}}
+						InputProps={{
+							classes: {
+								input: "gameEdit-editor-title-input"
+							}
+						}}
+						value={
+							this.state.rsvpIsSMS
+								? this.state.smsMessage
+								: this.state.emailMessage
+						}
+						onChange={this.handleMessageChange}
+					/>
+					<Button
+						className="button button-secondary rsvp-button"
+						onClick={this.sendRSVPRequest}
+					>
+						{this.state.rsvpIsSMS ? (
+							<Sms className="icon-left" />
+						) : (
+							<Mail className="icon-left" />
+						)}
+						Send Message
+					</Button>
+				</div>
+			</div>
+		);
 
 		return (
 			<div className="editGame-editor-div">
@@ -302,9 +565,15 @@ export class RSVPList extends React.Component {
 				</div>
 				<div className="editGame-body-div">
 					<div className="editGame-memberList-div">
-						<EnhancedTableToolbar numSelected={selected.length} />
+						<EnhancedTableToolbar
+							selected={selected}
+							callback={this.handleSwitchChange}
+						/>
 						<div className="rsvp-table-wrapper">
-							<Table className="rsvp-table">
+							<Table
+								className="rsvp-table"
+								style={{ tableLayout: "fixed" }}
+							>
 								<EnhancedTableHead
 									numSelected={this.state.selected.length}
 									order={order}
@@ -344,21 +613,11 @@ export class RSVPList extends React.Component {
 												<TableCell
 													component="th"
 													scope="row"
-													padding="none"
 												>
 													{n.name}
 												</TableCell>
-												<TableCell numeric>
-													{n.calories}
-												</TableCell>
-												<TableCell numeric>
-													{n.fat}
-												</TableCell>
-												<TableCell numeric>
-													{n.carbs}
-												</TableCell>
-												<TableCell numeric>
-													{n.protein}
+												<TableCell>
+													{ATTENDING[n.attending]}
 												</TableCell>
 											</TableRow>
 										);
@@ -367,6 +626,7 @@ export class RSVPList extends React.Component {
 							</Table>
 						</div>
 					</div>
+					{rsvpArea}
 				</div>
 			</div>
 		);
@@ -374,12 +634,17 @@ export class RSVPList extends React.Component {
 }
 
 RSVPList.propTypes = {
-	game: PropTypes.object
+	game: PropTypes.object,
+	members: PropTypes.array.isRequired
 };
 
 export default createContainer(() => {
 	Meteor.subscribe("games");
+	Meteor.subscribe("teams");
+	var game = Games.findOne({ _id: Session.get("selectedEventId") });
+	var team = game ? Teams.findOne({ _id: game.teamId }) : undefined;
 	return {
-		game: Games.findOne({ _id: Session.get("selectedEventId") })
+		game: game,
+		members: team ? team.members : []
 	};
 }, RSVPList);

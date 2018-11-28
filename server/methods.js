@@ -2,11 +2,12 @@ import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import { Teams } from "../imports/api/teams";
 import { Games } from "../imports/api/games";
+import { Requests } from "../imports/api/requests";
 import { UpdateSearchResults, PerformSearch } from "./searchHelper";
 import moment from "moment";
 import SimpleSchema from "simpl-schema";
 import { CancelAgendaJob, AddAgendaJob } from "./agenda";
-import { setupApi } from "./twilio_server";
+import { setupApi, sendSMS } from "./twilio_server";
 
 const YES = 0;
 const NO = 1;
@@ -397,11 +398,54 @@ Meteor.methods({
 
 		return user;
 	},
+	"users.findUsersById"(users) {
+		return users.map((u, i) => {
+			var user = Meteor.users.findOne({ _id: u });
+			if (!user) {
+				throw new Meteor.Error("No user found!");
+			}
+
+			return user;
+		});
+	},
 	"users.updateEmail"(userId, oldEmail, newEmail) {
 		Accounts.addEmail(userId, newEmail);
 		Accounts.removeEmail(userId, oldEmail);
 	},
 	"users.updateInfo"(userId, fName, lName, phoneNumber) {
+		new SimpleSchema({
+			fName: {
+				type: String,
+				min: 1
+			},
+			lName: {
+				type: String,
+				min: 1
+			},
+			userId: {
+				type: String,
+				min: 1
+			},
+			phoneNumber: {
+				type: String,
+				// regEx: SimpleSchema.RegEx.Phone,
+				min: 10
+			}
+		}).validate({
+			fName,
+			lName,
+			userId,
+			phoneNumber
+		});
+
+		// ensure this phone number is not being used
+		var existingUser = Meteor.users.findOne({ phoneNumber: phoneNumber });
+		if (existingUser) {
+			throw new Meteor.Error(
+				"This phone number is already in use by a user"
+			);
+		}
+
 		Meteor.users.update(userId, {
 			$set: {
 				phoneNumber: phoneNumber,
@@ -409,6 +453,14 @@ Meteor.methods({
 				lName: lName
 			}
 		});
+	},
+	"users.findByPhoneNumber"(phoneNumber) {
+		var user = Meteor.users.findOne({ phoneNumber: phoneNumber });
+		if (!user) {
+			throw new Meteor.Error("No user found!");
+		}
+
+		return user;
 	},
 	"agenda.add"(searchId) {
 		// AddAgendaJob(searchId);
@@ -420,8 +472,152 @@ Meteor.methods({
 	"agenda.cancel"(searchId) {
 		CancelAgendaJob(searchId);
 	},
+	"requests.insert"(phoneNumber, eventId) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			phoneNumber: {
+				type: String,
+				// regEx: SimpleSchema.RegEx.Phone,
+				min: 10
+			},
+			eventId: {
+				type: String,
+				min: 1
+			}
+		}).validate({ phoneNumber, eventId });
+
+		// request schema
+		var requestId = Requests.insert({
+			phoneNumber: phoneNumber,
+			eventId: eventId
+		});
+
+		return requestId;
+	},
+	"requests.update"(phoneNumber, attending) {
+		new SimpleSchema({
+			phoneNumber: {
+				type: String,
+				// regEx: SimpleSchema.RegEx.Phone,
+				min: 10
+			},
+			attending: {
+				type: SimpleSchema.Integer,
+				allowedValues: [YES, NO, MAYBE] // yes, no, maybe
+			}
+		}).validate({
+			phoneNumber,
+			attending
+		});
+
+		var request = Requests.findOne({ phoneNumber: phoneNumber });
+		if (!request) {
+			throw new Meteor.Error("Request not found!");
+		}
+
+		var user = Meteor.users.findOne({ phoneNumber: request.phoneNumber });
+		if (!user) {
+			throw new Meteor.Error(
+				"A user with that phone number could not be located."
+			);
+		}
+
+		var event = Games.findOne({ _id: request.eventId });
+		if (!event) {
+			throw new Meteor.Error("A game with that id could not be located.");
+		}
+
+		var team = Teams.findOne({ _id: event.teamId });
+		if (!team) {
+			throw new Meteor.Error("An associated team could not be located.");
+		}
+
+		if (!team.members.include(user._id)) {
+			throw new Meteor.Error(
+				"User is not a member of the associated team!"
+			);
+		}
+
+		Requests.remove({ phoneNumber: phoneNumber });
+
+		var ret = Games.update(
+			{ _id: event._id },
+			{
+				$pull: {
+					rollCall: { user: user._id }
+				}
+			}
+		);
+
+		return (
+			ret +
+			Games.update(
+				{ _id: event._id },
+				{
+					$push: {
+						rollCall: { user: user._id, attending: attending }
+					}
+				}
+			)
+		);
+	},
+	"requests.update.sync"(phoneNumber, attending) {
+		var result = Meteor.makeSync("requests.update")(phoneNumber, attending);
+		if (result.error === null) {
+			return result.data;
+		} else {
+			throw new Meteor.Error(result.error.response.statusCode, "error!");
+		}
+	},
 	"twilio.startup"() {
 		console.log("running twilio startup");
 		setupApi();
+	},
+	async "sms.send"(msg, number) {
+		var response = await sendSMS(msg, number);
+
+		if (response.result) {
+			return { phoneNumber: number, response: response.details };
+		} else {
+			throw new Meteor.Error("Failed to send SMS: " + response.details);
+		}
+	},
+	"email.send"(msg, email) {
+		throw new Meteor.Error("Not implemented yet!");
 	}
 });
+
+Meteor.makeSync = function(fn, context) {
+	return function(/* arguments */) {
+		var self = context || this;
+		var newArgs = _.toArray(arguments);
+		var callback;
+
+		for (var i = newArgs.length - 1; i >= 0; --i) {
+			var arg = newArgs[i];
+			var type = typeof arg;
+			if (type !== "undefined") {
+				if (type === "function") {
+					callback = arg;
+				}
+				break;
+			}
+		}
+
+		if (!callback) {
+			var fut = new Future();
+			callback = function(error, data) {
+				fut.return({ error: error, data: data });
+			};
+
+			++i;
+		}
+
+		newArgs[i] = Meteor.bindEnvironment(callback);
+		var result = fn.apply(self, newArgs);
+		return fut ? fut.wait() : result;
+	};
+};

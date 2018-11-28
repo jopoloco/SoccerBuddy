@@ -11,7 +11,8 @@
 }
 
 .button:hover {
-	background-color: tint($button-bg, 25%);
+	background-color: tint($button-hover, 25%);
+	color: white;
 }
 
 .button-link {
@@ -37,7 +38,8 @@
 }
 
 .button-secondary:hover {
-	background-color: shade($button-secondary-bg, 25%);
+	background-color: shade($button-hover, 25%);
+	color: white;
 }
 
 .icon-left {

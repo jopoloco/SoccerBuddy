@@ -84,9 +84,9 @@ export class EditGame extends React.Component {
 						value={this.state.tab}
 						onChange={this.handleTabChange}
 					>
-						<Tab label="Item One" />
-						<Tab label="Item Two" />
-						<Tab label="Item Three" />
+						<Tab label="Admin" />
+						<Tab label="Rollcall" />
+						<Tab label="Formation" />
 					</Tabs>
 				</AppBar>
 				{/* {this.state.tab === 0 && <TabContainer>Item One</TabContainer>}

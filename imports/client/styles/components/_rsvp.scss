@@ -1,5 +1,9 @@
 .rsvp-toolbar {
+	border-bottom: 1px solid $grey;
+	height: 5rem;
+	min-height: 0px;
 	justify-content: space-between;
+	padding-right: 0px;
 }
 
 .rsvp-toolbar-div {
@@ -18,4 +22,70 @@
 
 .actions {
 	color: plum;
+}
+
+.rsvp-message-header {
+	border-bottom: 1px solid $grey;
+	display: flex;
+	height: 5rem;
+	padding: 0px 20px;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.rsvp-type-toggle {
+	padding-left: 1px;
+}
+
+.formControl-left {
+	padding-right: 10px;
+}
+
+.formControl-right {
+	padding-left: 1px;
+}
+
+.rsvp-toggle-bar {
+	background-color: $color-secondary;
+}
+
+.rsvp-toggle-barChecked {
+	background-color: $color-primary !important;
+}
+
+.rsvp-toggle-icon {
+	background-color: $color-secondary;
+}
+
+.rsvp-toggle-iconChecked {
+	background-color: $color-primary;
+}
+
+.rsvp-message {
+	flex-basis: 70%;
+	margin: 0px;
+	width: 90%;
+}
+
+.rsvp-button {
+	flex-basis: 10%;
+	background-color: $color-primary;
+	color: white;
+	margin: 0px;	
+}
+
+.request {
+	color: $color-primary;
+	opacity: 0;
+	overflow: hidden;
+	border-radius: 3px;
+	margin: 0;
+	padding: 10px;
+	text-align: center;
+	transition: all 0.75s ease-in-out;
+}
+
+.request-visible {
+	opacity: 1;
 }

@@ -67,15 +67,17 @@
 	border: 3px black solid;
 	overflow-y: auto;
 	margin: 20px 0px 0px 0px;
-	padding: 20px;
-	width: 100%;
+	padding: 20px 0px 20px 0px;
+	height: 100%;
+	flex-basis: 40%;
 }
 
 .editGame-rsvp-div {
 	border: 3px black solid;
 	flex-basis: 60%;
+	height: 100%;
 	margin: 20px 0px 0px 10px;
-	padding: 20px;
+	padding: 20px 0px;
 }
 
 .editGame-details-div {
@@ -122,4 +124,12 @@
 	color: white;
 	margin: 0px;
 	width: 100%;
+}
+
+.editGame-rsvp-message-div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: calc(100% - 5rem);
 }
