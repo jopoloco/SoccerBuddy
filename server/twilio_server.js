@@ -1,7 +1,7 @@
 //
 //
 // keep for reference
-const http = require("http"); // comment for debug
+// const http = require("http"); // comment for debug
 // const express = require("express");
 // const MessagingResponse = require("twilio").twiml.MessagingResponse;
 // const bodyParser = require("body-parser");
@@ -17,15 +17,15 @@ import bodyParser from "body-parser";
 import { requestUpdate } from "./requestHelper";
 
 // Your Account Sid and Auth Token from twilio.com/console
-const accountSid = "ACe312f86d62e91bcec8a9b576c73c9a34";
-const authToken = "f337f242c205af3303b9cdb4edc3502e";
-const FROM = "+13524538456";
+const accountSid = "AC308001b0009f2913a390761ee3e9cd20";
+const authToken = "d9f35b4a5f761a22bdc4ab878ae61adb";
+const FROM = "+13522689225";
 var app = express();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var initiated = false;
 var client = new twilio(accountSid, authToken);
 
-const PORT = process.env.PORT ? process.env.PORT : 1337; // comment for debug
+// const PORT = process.env.PORT ? process.env.PORT : 1337; // comment for debug
 const YES = 0;
 const NO = 1;
 const MAYBE = 2;
@@ -91,13 +91,13 @@ export function setupApi() {
 	// });
 
 	// uncomment this to run debug listener
-	http.createServer(app).listen(1337, () => {
-		console.log("Express server listening on port 1337");
-	});
+	// http.createServer(app).listen(1337, () => {
+	// 	console.log("Express server listening on port 1337");
+	// });
 
-	app.listen(PORT, () => {
-		console.log("example app is now listenging on port :" + PORT);
-	});
+	// app.listen(PORT, () => {
+	// 	console.log("example app is now listenging on port :" + PORT);
+	// });
 	// comment to here
 }
 
