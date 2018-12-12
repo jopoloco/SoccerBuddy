@@ -398,6 +398,43 @@ Meteor.methods({
 
 		return user;
 	},
+	"users.createRollcallUser"(fName, lName, phoneNumber) {
+		new SimpleSchema({
+			fName: {
+				type: String,
+				min: 1
+			},
+			lName: {
+				type: String,
+				min: 1
+			},
+			phoneNumber: {
+				type: String,
+				// regEx: SimpleSchema.RegEx.Phone,
+				min: 10
+			}
+		}).validate({
+			fName,
+			lName,
+			phoneNumber
+		});
+
+		// ensure this phone number is not being used
+		var existingUser = Meteor.users.findOne({ phoneNumber: phoneNumber });
+		if (existingUser) {
+			throw new Meteor.Error(
+				"This phone number is already in use by a user"
+			);
+		}
+
+		Meteor.users.insert(userId, {
+			$set: {
+				phoneNumber: phoneNumber,
+				fName: fName,
+				lName: lName
+			}
+		});
+	},
 	"users.findUsersById"(users) {
 		return users.map((u, i) => {
 			var user = Meteor.users.findOne({ _id: u });
