@@ -116,7 +116,7 @@ export class Account extends React.Component {
 					phoneNumber,
 					(err, res) => {
 						if (err) {
-							self.setState({ error: err.reason });
+							self.setState({ error: err.error });
 						}
 					}
 				);

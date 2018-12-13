@@ -44,6 +44,8 @@
 }
 
 .memberList-header {
+	display: flex;
+	justify-content: center;
 	background-color: white;
 	border-bottom: 1px solid $color-primary;
 	font-size: $base-font-size;

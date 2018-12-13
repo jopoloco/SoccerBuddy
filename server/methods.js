@@ -440,9 +440,9 @@ Meteor.methods({
 
 		// ensure this phone number is not being used
 		var existingUser = Meteor.users.findOne({ phoneNumber: phoneNumber });
-		if (existingUser) {
+		if (existingUser && existingUser._id != userId) {
 			throw new Meteor.Error(
-				"This phone number is already in use by a user"
+				"This phone number is already in use by a different user"
 			);
 		}
 
@@ -461,6 +461,10 @@ Meteor.methods({
 		}
 
 		return user;
+	},
+	"users.createHollow"(phoneNumber, fName, lName) {
+		var newId = Accounts.createUser({username: phoneNumber, phoneNumber: phoneNumber, fName: fName, lName: lName});
+		return newId;
 	},
 	"agenda.add"(searchId) {
 		// AddAgendaJob(searchId);

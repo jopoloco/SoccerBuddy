@@ -23,6 +23,11 @@
 	flex-direction: column;
 }
 
+.addMember-modal-div {
+	@extend .addTeam-modal-div;
+	height: $team-modal-height / 2;
+}
+
 .createTeam-div {
 	margin-top: 25px;
 	display: flex;

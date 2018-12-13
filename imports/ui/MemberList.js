@@ -5,7 +5,7 @@ import { createContainer } from "meteor/react-meteor-data";
 import { Teams } from "../api/teams";
 import { Session } from "meteor/session";
 
-import { Delete, Save, Comment } from "@material-ui/icons";
+import { AddCircle, Delete, Save, Comment } from "@material-ui/icons";
 import {
 	Button,
 	Checkbox,
@@ -21,10 +21,12 @@ import {
 
 import RequestItem from "./RequestItem";
 import MemberItem from "./MemberItem";
+import AddMemberModal from "./AddMemberModal";
 
 export class MemberList extends React.Component {
 	state = {
-		checked: [0]
+		checked: [0],
+		addMemberModalOpen: false
 	};
 
 	handleToggle = (value) => () => {
@@ -41,6 +43,10 @@ export class MemberList extends React.Component {
 		this.setState({
 			checked: newChecked
 		});
+	};
+
+	addMemberCallback = () => {
+		this.setState({ addMemberModalOpen: false });
 	};
 
 	render() {
@@ -80,9 +86,22 @@ export class MemberList extends React.Component {
 					{requestsTable}
 					<ListSubheader className="memberList-header">
 						MEMBERS
+						<IconButton
+							aria-label="Add Member"
+							className="deleteMember"
+							onClick={() =>
+								this.setState({ addMemberModalOpen: true })
+							}
+						>
+							<AddCircle />
+						</IconButton>
 					</ListSubheader>
 					{membersTable}
 				</List>
+				<AddMemberModal
+					isOpen={this.state.addMemberModalOpen}
+					callback={this.addMemberCallback}
+				/>
 			</div>
 		);
 	}

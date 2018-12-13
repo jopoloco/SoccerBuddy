@@ -53,7 +53,7 @@ export class Signup extends React.Component {
 					phoneNumber,
 					(err) => {
 						if (err) {
-							this.setState({ error: err.reason });
+							this.setState({ error: err.error });
 						}
 					}
 				);
