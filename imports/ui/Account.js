@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { Accounts } from "meteor/accounts-base";
 import { createContainer } from "meteor/react-meteor-data";
 
+import SuccessMessage from "./SuccessMessage";
+
 export class Account extends React.Component {
 	constructor(props) {
 		super(props);
@@ -118,6 +120,9 @@ export class Account extends React.Component {
 						if (err) {
 							self.setState({ error: err.error });
 						}
+						if (res) {
+							SuccessMessage.triggerMessage();
+						}
 					}
 				);
 			}
@@ -185,6 +190,7 @@ export class Account extends React.Component {
 						/>
 						<button className="button">Update Account</button>
 					</form>
+					<SuccessMessage message="Account updated" />
 					<Link to="/dashboard">
 						Cancel changes and return to dashboard
 					</Link>

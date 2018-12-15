@@ -154,6 +154,41 @@ Meteor.methods({
 			}
 		);
 	},
+	"teams.member.insert"(user, team) {
+		if (!this.userId) {
+			throw new Meteor.Error("not-authorized");
+		}
+
+		new SimpleSchema({
+			user: {
+				type: String,
+				min: 1
+			},
+			team: {
+				type: String,
+				min: 1
+			}
+		}).validate({ user, team });
+
+		var teamInstance = Teams.findOne({ _id: team });
+
+		if (!teamInstance) {
+			throw new Meteor.Error("team not found");
+		}
+
+		if (teamInstance.members.includes(user)) {
+			throw new Meteor.Error("User is already a member of this team");
+		}
+
+		return Teams.update(
+			{ _id: team },
+			{
+				$push: {
+					members: user
+				}
+			}
+		);
+	},
 	"teams.member.remove"(user, team) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
@@ -398,43 +433,6 @@ Meteor.methods({
 
 		return user;
 	},
-	"users.createRollcallUser"(fName, lName, phoneNumber) {
-		new SimpleSchema({
-			fName: {
-				type: String,
-				min: 1
-			},
-			lName: {
-				type: String,
-				min: 1
-			},
-			phoneNumber: {
-				type: String,
-				// regEx: SimpleSchema.RegEx.Phone,
-				min: 10
-			}
-		}).validate({
-			fName,
-			lName,
-			phoneNumber
-		});
-
-		// ensure this phone number is not being used
-		var existingUser = Meteor.users.findOne({ phoneNumber: phoneNumber });
-		if (existingUser) {
-			throw new Meteor.Error(
-				"This phone number is already in use by a user"
-			);
-		}
-
-		Meteor.users.insert(userId, {
-			$set: {
-				phoneNumber: phoneNumber,
-				fName: fName,
-				lName: lName
-			}
-		});
-	},
 	"users.findUsersById"(users) {
 		return users.map((u, i) => {
 			var user = Meteor.users.findOne({ _id: u });
@@ -483,11 +481,12 @@ Meteor.methods({
 			);
 		}
 
-		Meteor.users.update(userId, {
+		return Meteor.users.update(userId, {
 			$set: {
 				phoneNumber: phoneNumber,
 				fName: fName,
-				lName: lName
+				lName: lName,
+				isRollcall: false
 			}
 		});
 	},
@@ -499,8 +498,52 @@ Meteor.methods({
 
 		return user;
 	},
-	"users.createHollow"(phoneNumber, fName, lName) {
-		var newId = Accounts.createUser({username: phoneNumber, phoneNumber: phoneNumber, fName: fName, lName: lName});
+	"users.createRollcallUser"(fName, lName, phoneNumber) {
+		new SimpleSchema({
+			fName: {
+				type: String,
+				min: 1
+			},
+			lName: {
+				type: String,
+				min: 1
+			},
+			phoneNumber: {
+				type: String,
+				// regEx: SimpleSchema.RegEx.Phone,
+				min: 10
+			}
+		}).validate({
+			fName,
+			lName,
+			phoneNumber
+		});
+
+		// ensure this phone number is not being used
+		var existingUser = Meteor.users.findOne({ phoneNumber: phoneNumber });
+		if (existingUser) {
+			throw new Meteor.Error(
+				"This phone number is already in use by a user"
+			);
+		}
+
+		console.log("creating user!");
+		var newId = Accounts.createUser({
+			username: phoneNumber
+		});
+		console.log("user '" + newId + "' created!");
+
+		Meteor.users.update(newId, {
+			$set: {
+				phoneNumber: phoneNumber,
+				fName: fName,
+				lName: lName,
+				isRollcall: true,
+				emails: []
+			}
+		});
+		console.log("user '" + newId + "' updated!");
+
 		return newId;
 	},
 	"agenda.add"(searchId) {

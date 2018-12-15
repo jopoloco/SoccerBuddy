@@ -47,38 +47,8 @@ export class EditGame extends React.Component {
 	};
 
 	render() {
-		var menu = (
-			<div className="pageContent-sidebar">
-				<div className="editGame-menu-div">
-					MENU!
-					<Button
-						onClick={() => this.setState({ component: Admin })}
-						className="button button-secondary menu-button"
-						disabled={this.state.disabled}
-					>
-						Admin
-					</Button>
-					<Button
-						onClick={() => this.setState({ component: RSVPList })}
-						className="button button-secondary menu-button"
-						disabled={this.state.disabled}
-					>
-						RSVP
-					</Button>
-					<Button
-						onClick={() => this.setState({ component: Formation })}
-						className="button button-secondary menu-button"
-						disabled={this.state.disabled}
-					>
-						Formation
-					</Button>
-				</div>
-			</div>
-		);
-
 		return (
 			<div className="editGame-page">
-				{/* {menu} */}
 				<AppBar position="static" className="editGame-header">
 					<Tabs
 						value={this.state.tab}
@@ -89,9 +59,6 @@ export class EditGame extends React.Component {
 						<Tab label="Formation" />
 					</Tabs>
 				</AppBar>
-				{/* {this.state.tab === 0 && <TabContainer>Item One</TabContainer>}
-				{this.state.tab === 1 && <TabContainer>Item Two</TabContainer>}
-				{this.state.tab === 2 && <TabContainer>Item Three</TabContainer>} */}
 				<div className="editGame-main">
 					<this.state.component />
 				</div>

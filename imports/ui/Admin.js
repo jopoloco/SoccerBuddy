@@ -29,6 +29,7 @@ import {
 
 import { Games } from "../api/games";
 import DropDownMenu from "./DropDownMenu";
+import SuccessMessage from "./SuccessMessage";
 
 const EVENT_TYPES = [
 	{ _id: "0", title: "game" },
@@ -114,7 +115,8 @@ export class Admin extends React.Component {
 				}
 
 				if (res) {
-					// ...
+					// success messsage
+					SuccessMessage.triggerMessage();
 				}
 			}
 		);
@@ -191,6 +193,7 @@ export class Admin extends React.Component {
 								Save
 							</Button>
 						</div>
+						<SuccessMessage message="Game Updated" />
 					</div>
 				</div>
 			</div>

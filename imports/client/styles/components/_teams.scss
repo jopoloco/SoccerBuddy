@@ -23,11 +23,6 @@
 	flex-direction: column;
 }
 
-.addMember-modal-div {
-	@extend .addTeam-modal-div;
-	height: $team-modal-height / 2;
-}
-
 .createTeam-div {
 	margin-top: 25px;
 	display: flex;
@@ -122,6 +117,42 @@
 .teamMenu-team {
 	// font-size: $base-font-size;
 	width: 100%;
+}
+
+.addMember-modal-div {
+	@extend .addTeam-modal-div;
+	height: $team-modal-height;
+	width: $team-modal-width / 2;
+	top: calc((100vh - #{$team-modal-height}) / 2);
+	left: calc((100vw - #{$team-modal-width / 2}) / 2);
+}
+
+.addMember-title {
+	@extend .addTeam-title;
+}
+
+.addMember-memberInfo-div {
+	@extend .existingTeam-div-sub;
+	flex-direction: column;
+	margin: 0px;
+	width: 100%;
+}
+
+.addMember-memberInfo-field {
+	margin: 10px;
+}
+
+.addMember-button {
+	// border: 1px solid $color-default;
+	// padding: 0px;
+	// margin: 10px;
+	// width: 48px;
+	@extend .button;
+	margin: $space;
+}
+
+.addMember-button-label {
+	font-size: $small-font-size;
 }
 
 .coachedTeam {

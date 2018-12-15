@@ -3,6 +3,13 @@ import SimpleSchema from "simpl-schema";
 import { Accounts } from "meteor/accounts-base";
 
 export const validateNewUser = (user) => {
+	console.log("fName: " + user.fName);
+	console.log("rollcall: " + user.isRollcall);
+	console.log("rollclal is undefined: " + user.isRollcall == undefined);
+	if (user.isRollcall) {
+		return true;
+	}
+
 	const email = user.emails[0].address;
 	new SimpleSchema({
 		email: {
@@ -15,5 +22,5 @@ export const validateNewUser = (user) => {
 };
 
 if (Meteor.isServer) {
-	Accounts.validateNewUser(validateNewUser);
+	// Accounts.validateNewUser(validateNewUser);
 }

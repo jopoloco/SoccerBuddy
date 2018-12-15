@@ -10,6 +10,8 @@ import { Teams } from "../api/teams";
 import { AddBox, Cancel, Delete, NoteAdd } from "@material-ui/icons";
 import { IconButton, Grid, Modal, TextField } from "@material-ui/core";
 
+import SuccessMessage from "./SuccessMessage";
+
 const styles = {
 	customStyles: {
 		option: (provided, state) => ({
@@ -97,12 +99,7 @@ export class FindTeam extends React.Component {
 				this.setState({ existingTeamId: "", selectedTeam: "" });
 
 				// set success message
-				var sn = document.getElementById("savedNotification");
-				sn.classList.toggle("saved-visible", true);
-				setTimeout(
-					() => sn.classList.toggle("saved-visible", false),
-					1000
-				);
+				SuccessMessage.triggerMessage();
 			}
 		});
 	};
@@ -132,12 +129,6 @@ export class FindTeam extends React.Component {
 		var options = this.props.teams.map((team, i) => {
 			return { value: team._id, label: team.title };
 		});
-
-		var SaveNotification = (
-			<div id="savedNotification" className="saved">
-				<p>Membership requested</p>
-			</div>
-		);
 
 		var TeamModal = (
 			<Modal onClose={this.handleModalClose} open={this.state.modalOpen}>
@@ -200,7 +191,7 @@ export class FindTeam extends React.Component {
 							</IconButton>
 						</div>
 					</div>
-					{SaveNotification}
+					<SuccessMessage message="Membership requested" />
 				</div>
 			</Modal>
 		);
