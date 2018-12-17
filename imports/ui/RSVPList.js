@@ -427,9 +427,9 @@ export class RSVPList extends React.Component {
 	handleMessageChange = (event) => {
 		var msg = event.target.value;
 		if (this.state.rsvpIsSMS) {
-			if (msg.length > 160) {
-				// TODO
-				// ... set error
+			if (msg.length > 300) {
+				// don't set the message as it is too long
+				return;
 			}
 
 			this.setState({ smsMessage: msg });
@@ -503,6 +503,8 @@ export class RSVPList extends React.Component {
 			</div>
 		);
 
+		var CharacterCount = this.state.rsvpIsSMS ? (<div className="characterCount-div">{"Characters remaining: " + (300 - this.state.smsMessage.length)}</div>) : (undefined);
+
 		var rsvpArea = (
 			<div className="editGame-rsvp-div">
 				<div className="rsvp-message-header">
@@ -540,6 +542,7 @@ export class RSVPList extends React.Component {
 						}
 						onChange={this.handleMessageChange}
 					/>
+					{CharacterCount}
 					<Button
 						className="button button-secondary rsvp-button"
 						onClick={this.sendRSVPRequest}
