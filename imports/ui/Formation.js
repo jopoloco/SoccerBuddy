@@ -20,7 +20,7 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 
 export class Formation extends React.Component {
 	constructor(props) {
@@ -49,8 +49,8 @@ Formation.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
+	Meteor.subscribe("events");
 	return {
-		game: Games.findOne({ _id: Session.get("selectedEventId") })
+		game: Events.findOne({ _id: Session.get("selectedEventId") })
 	};
 }, Formation);

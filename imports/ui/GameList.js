@@ -2,7 +2,7 @@ import React from "react";
 import { Meteor } from "meteor/meteor";
 import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 import { Session } from "meteor/session";
 
 import { Delete, Save, Comment } from "@material-ui/icons";
@@ -71,10 +71,10 @@ GameList.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
+	Meteor.subscribe("events");
 	return {
 		// anything returned in here is passed into the component down below
-		games: Games.find(
+		games: Events.find(
 			{ teamId: Session.get("selectedTeamId") },
 			{
 				sort: {

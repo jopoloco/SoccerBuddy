@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import { Teams } from "../imports/api/teams";
-import { Games } from "../imports/api/games";
+import { Events } from "../imports/api/events";
 import { Requests } from "../imports/api/requests";
 import { UpdateSearchResults, PerformSearch } from "./searchHelper";
 import moment from "moment";
@@ -231,7 +231,7 @@ Meteor.methods({
 	"teams.toggleCoach"(user, team, isCoach) {
 		throw new Meteor.Error("not implement yet");
 	},
-	"games.insert"(teamId, title, date, type) {
+	"events.insert"(teamId, title, date, location, type) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -242,14 +242,15 @@ Meteor.methods({
 		}
 
 		// game schema
-		var gameId = Games.insert({
+		var gameId = Events.insert({
 			date: date,
 			teamId: teamId,
 			opponent: "unnamed",
 			title: title,
 			type: type,
 			coachId: team.coachId,
-			rollCall: []
+			rollCall: [],
+			location: location
 		});
 
 		return gameId;
@@ -268,7 +269,7 @@ Meteor.methods({
 
 		return Teams.remove({ _id, coachId: this.userId });
 	},
-	"games.remove"(_id) {
+	"events.remove"(_id) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -280,7 +281,7 @@ Meteor.methods({
 			}
 		}).validate({ _id });
 
-		return Games.remove({ _id, coachId: this.userId });
+		return Events.remove({ _id, coachId: this.userId });
 	},
 	// async "teams.update"(teamId, items) {
 	// 	throw new Meteor.Error("not implemented yet");
@@ -331,7 +332,7 @@ Meteor.methods({
 			}
 		);
 	},
-	"games.update"(_id, coachId, updates) {
+	"events.update"(_id, coachId, updates) {
 		if (!this.userId) {
 			throw new Meteor.Error("not-authorized");
 		}
@@ -365,13 +366,17 @@ Meteor.methods({
 			title: {
 				type: String,
 				optional: true
+			},
+			location: {
+				type: String,
+				optional: true
 			}
 		}).validate({
 			_id,
 			...updates
 		});
 
-		return Games.update(
+		return Events.update(
 			{ _id, coachId },
 			{
 				$set: {
@@ -380,7 +385,7 @@ Meteor.methods({
 			}
 		);
 	},
-	"games.rsvp"(_id, userId, attending) {
+	"events.rsvp"(_id, userId, attending) {
 		new SimpleSchema({
 			_id: {
 				type: String,
@@ -400,7 +405,7 @@ Meteor.methods({
 			attending
 		});
 
-		var ret = Games.update(
+		var ret = Events.update(
 			{ _id },
 			{
 				$pull: {
@@ -411,7 +416,7 @@ Meteor.methods({
 
 		return (
 			ret +
-			Games.update(
+			Events.update(
 				{ _id },
 				{
 					$push: {
@@ -421,7 +426,7 @@ Meteor.methods({
 			)
 		);
 	},
-	async "games.compile"(searchId) {
+	async "events.compile"(searchId) {
 		throw new Meteor.Error("not implement yet");
 		return await PerformSearch(searchId, false);
 	},
@@ -609,7 +614,7 @@ Meteor.methods({
 			);
 		}
 
-		var event = Games.findOne({ _id: request.eventId });
+		var event = Events.findOne({ _id: request.eventId });
 		if (!event) {
 			throw new Meteor.Error("A game with that id could not be located.");
 		}
@@ -627,7 +632,7 @@ Meteor.methods({
 
 		Requests.remove({ phoneNumber: phoneNumber });
 
-		var ret = Games.update(
+		var ret = Events.update(
 			{ _id: event._id },
 			{
 				$pull: {
@@ -638,7 +643,7 @@ Meteor.methods({
 
 		return (
 			ret +
-			Games.update(
+			Events.update(
 				{ _id: event._id },
 				{
 					$push: {

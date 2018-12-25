@@ -4,7 +4,7 @@ import { createContainer } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import { Session } from "meteor/session";
 
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 import { FindTeam } from "./FindTeam";
 import DropDownMenu from "./DropDownMenu";
 import GameList from "./GameList";
@@ -60,7 +60,7 @@ export class SidebarHeader extends React.Component {
 
 	RSVP = (attending) => {
 		Meteor.call(
-			"games.rsvp",
+			"events.rsvp",
 			this.props.eventId,
 			Meteor.userId(),
 			attending,
@@ -135,8 +135,8 @@ SidebarHeader.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
-	var game = Games.findOne({ _id: Session.get("selectedEventId") });
+	Meteor.subscribe("events");
+	var game = Events.findOne({ _id: Session.get("selectedEventId") });
 	var attendingArray = [];
 	var attending = -1;
 
@@ -153,7 +153,7 @@ export default createContainer(() => {
 	return {
 		// anything returned in here is passed into the component down below
 		Session,
-		games: Games.find(
+		games: Events.find(
 			{ teamId: Session.get("selectedTeamId") },
 			{
 				sort: {

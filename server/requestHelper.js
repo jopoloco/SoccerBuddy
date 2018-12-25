@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Teams } from "../imports/api/teams";
-import { Games } from "../imports/api/games";
+import { Events } from "../imports/api/events";
 import { Requests } from "../imports/api/requests";
 import SimpleSchema from "simpl-schema";
 
@@ -43,7 +43,7 @@ export async function requestUpdate(phoneNumber, attending) {
 			return result;
 		}
 
-		var event = await Games.rawCollection().findOne({
+		var event = await Events.rawCollection().findOne({
 			_id: request.eventId
 		});
 		if (!event) {
@@ -71,7 +71,7 @@ export async function requestUpdate(phoneNumber, attending) {
 			return result;
 		}
 
-		result.res = await Games.rawCollection().update(
+		result.res = await Events.rawCollection().update(
 			{ _id: event._id },
 			{
 				$pull: {
@@ -85,7 +85,7 @@ export async function requestUpdate(phoneNumber, attending) {
 			return result;
 		}
 
-		result.res += await Games.rawCollection().update(
+		result.res += await Events.rawCollection().update(
 			{ _id: event._id },
 			{
 				$push: {

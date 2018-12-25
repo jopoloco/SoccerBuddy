@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
 
 import "../imports/api/teams";
-import "../imports/api/games";
+import "../imports/api/events";
 import "../imports/api/users";
 import "../imports/startup/simple-schema-configuration";
 

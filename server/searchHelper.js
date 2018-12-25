@@ -1,7 +1,7 @@
 // imports
 import { Meteor } from "meteor/meteor";
 import { Teams } from "../imports/api/teams";
-import { Games } from "../imports/api/games";
+import { Games } from "../imports/api/events";
 import axios from "axios";
 import { sendSMS } from "./twilio_server";
 

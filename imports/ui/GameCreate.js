@@ -40,17 +40,18 @@ export default class GameCreate extends React.Component {
 		this.state = {
 			modalOpen: this.props.isOpen,
 			delete: false,
-			title: "Untitled",
-			date: "2018-01-01",
-			type: ""
+			title: "",
+			date: "2019-01-01T10:30",
+			type: "",
+			location: ""
 		};
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.modalOpen != this.props.isOpen) {
 			this.setState({
-				title: "Untitled",
-				date: "2018-01-01",
+				title: "",
+				date: "2019-01-01T10:30",
 				type: "",
 				modalOpen: this.props.isOpen
 			});
@@ -60,10 +61,11 @@ export default class GameCreate extends React.Component {
 	createEvent = () => {
 		var self = this;
 		Meteor.call(
-			"games.insert",
+			"events.insert",
 			Session.get("selectedTeamId"),
 			self.state.title,
 			self.state.date,
+			self.state.location,
 			self.state.type,
 			function(err, res) {
 				if (err) {
@@ -121,9 +123,9 @@ export default class GameCreate extends React.Component {
 						margin="normal"
 					/>
 					<TextField
-						id="date"
-						label="Date"
-						type="date"
+						id="dateTime"
+						label="Date and Time"
+						type="datetime-local"
 						variant="outlined"
 						InputLabelProps={{
 							classes: {
@@ -137,6 +139,24 @@ export default class GameCreate extends React.Component {
 						}}
 						value={this.state.date}
 						onChange={this.handleChange("date")}
+						margin="normal"
+					/>
+					<TextField
+						id="location"
+						label="Location"
+						variant="outlined"
+						InputLabelProps={{
+							classes: {
+								root: "editor-title-label"
+							}
+						}}
+						InputProps={{
+							classes: {
+								input: "editor-title-input"
+							}
+						}}
+						value={this.state.location}
+						onChange={this.handleChange("location")}
 						margin="normal"
 					/>
 					<div className="createGame-type">

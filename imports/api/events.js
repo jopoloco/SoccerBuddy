@@ -2,10 +2,10 @@ import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 import { Session } from "meteor/session";
 
-export const Games = new Mongo.Collection("games");
+export const Events = new Mongo.Collection("events");
 
 if (Meteor.isServer) {
-	Meteor.publish("games", function() {
-		return Games.find({});
+	Meteor.publish("events", function() {
+		return Events.find({});
 	});
 }

@@ -16,7 +16,7 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 import Admin from "./Admin";
 import RSVPList from "./RSVPList";
 import Formation from "./Formation";
@@ -72,8 +72,8 @@ EditGame.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
+	Meteor.subscribe("events");
 	return {
-		game: Games.findOne({ _id: Session.get("selectedEventId") })
+		game: Events.findOne({ _id: Session.get("selectedEventId") })
 	};
 }, EditGame);

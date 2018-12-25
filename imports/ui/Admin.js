@@ -27,7 +27,7 @@ import {
 	TextField
 } from "@material-ui/core";
 
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 import DropDownMenu from "./DropDownMenu";
 import SuccessMessage from "./SuccessMessage";
 
@@ -45,7 +45,8 @@ export class Admin extends React.Component {
 			date: "2018-01-01",
 			type: "",
 			typeId: "-1",
-			checked: [0]
+			checked: [0],
+			location: ""
 		};
 	}
 
@@ -66,7 +67,8 @@ export class Admin extends React.Component {
 				title: game.title,
 				date: game.date,
 				type: game.type,
-				typeId: typeId
+				typeId: typeId,
+				location: game.location
 			});
 		}
 	}
@@ -102,10 +104,11 @@ export class Admin extends React.Component {
 		var updates = {
 			title: this.state.title,
 			date: this.state.date,
-			type: this.state.type
+			type: this.state.type,
+			location: this.state.location
 		};
 		Meteor.call(
-			"games.update",
+			"events.update",
 			this.props.game._id,
 			this.props.game.coachId,
 			updates,
@@ -153,10 +156,10 @@ export class Admin extends React.Component {
 							margin="normal"
 						/>
 						<TextField
-							id="date"
-							label="Date"
+							id="dateTime"
+							label="Date and Time"
 							className="gameEdit-textfield"
-							type="date"
+							type="datetime-local"
 							variant="outlined"
 							InputLabelProps={{
 								classes: {
@@ -170,6 +173,25 @@ export class Admin extends React.Component {
 							}}
 							value={this.state.date}
 							onChange={this.handleChange("date")}
+							margin="normal"
+						/>
+						<TextField
+							id="location"
+							label="Location"
+							className="gameEdit-textfield"
+							variant="outlined"
+							InputLabelProps={{
+								classes: {
+									root: "gameEdit-editor-title-label"
+								}
+							}}
+							InputProps={{
+								classes: {
+									input: "gameEdit-editor-title-input"
+								}
+							}}
+							value={this.state.location}
+							onChange={this.handleChange("location")}
 							margin="normal"
 						/>
 						<div className="gameEdit-type">
@@ -206,8 +228,8 @@ Admin.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
+	Meteor.subscribe("events");
 	return {
-		game: Games.findOne({ _id: Session.get("selectedEventId") })
+		game: Events.findOne({ _id: Session.get("selectedEventId") })
 	};
 }, Admin);

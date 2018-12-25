@@ -70,7 +70,7 @@ export class GameItem extends React.Component {
 			return;
 		}
 
-		Meteor.call("games.remove", this.props.game._id, function(err, res) {
+		Meteor.call("events.remove", this.props.game._id, function(err, res) {
 			if (err) {
 				alert(err);
 			}
@@ -88,7 +88,7 @@ export class GameItem extends React.Component {
 			return;
 		}
 
-		// Meteor.call("games.remove", this.props.gameId, function(err, res) {
+		// Meteor.call("events.remove", this.props.gameId, function(err, res) {
 		// 	if (err) {
 		// 		alert(err);
 		// 	}

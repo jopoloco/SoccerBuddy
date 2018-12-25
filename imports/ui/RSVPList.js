@@ -40,7 +40,7 @@ import {
 	Typography
 } from "@material-ui/core";
 
-import { Games } from "../api/games";
+import { Events } from "../api/events";
 import { Teams } from "../api/teams";
 
 const ROWS = [
@@ -372,7 +372,9 @@ export class RSVPList extends React.Component {
 						"Hello, " +
 						name +
 						"! Your coach has requested you RSVP for the ";
-					msg = msg + g.type + " '" + g.title + "' on " + g.date;
+					msg =
+						msg + g.type + " '" + g.title + "' at // on " + g.date;
+					msg = msg + ", located at '" + g.location + "'";
 					msg =
 						msg +
 						". Please reply with either YES, NO, or MAYBE to this text. Thanks!";
@@ -503,7 +505,14 @@ export class RSVPList extends React.Component {
 			</div>
 		);
 
-		var CharacterCount = this.state.rsvpIsSMS ? (<div className="characterCount-div">{"Characters remaining: " + (300 - this.state.smsMessage.length)}</div>) : (undefined);
+		var CharacterCount = this.state.rsvpIsSMS ? (
+			<div className="characterCount-div">
+				{"Characters remaining: " +
+					(300 - this.state.smsMessage.length)}
+			</div>
+		) : (
+			undefined
+		);
 
 		var rsvpArea = (
 			<div className="editGame-rsvp-div">
@@ -642,9 +651,9 @@ RSVPList.propTypes = {
 };
 
 export default createContainer(() => {
-	Meteor.subscribe("games");
+	Meteor.subscribe("events");
 	Meteor.subscribe("teams");
-	var game = Games.findOne({ _id: Session.get("selectedEventId") });
+	var game = Events.findOne({ _id: Session.get("selectedEventId") });
 	var team = game ? Teams.findOne({ _id: game.teamId }) : undefined;
 	return {
 		game: game,
