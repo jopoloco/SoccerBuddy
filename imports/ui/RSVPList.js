@@ -368,12 +368,14 @@ export class RSVPList extends React.Component {
 			if (rsvpIsSMS) {
 				if (smsMessage == "") {
 					var g = this.props.game;
+					var date = g.date.substring(0, 10);
+					var time = g.date.substring(11);
 					msg =
 						"Hello, " +
 						name +
 						"! Your coach has requested you RSVP for the ";
 					msg =
-						msg + g.type + " '" + g.title + "' at // on " + g.date;
+						msg + g.type + " '" + g.title + "' at " + time + " on " + date;
 					msg = msg + ", located at '" + g.location + "'";
 					msg =
 						msg +
