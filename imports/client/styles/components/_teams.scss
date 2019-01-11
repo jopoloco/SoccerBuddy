@@ -89,6 +89,7 @@
 }
 
 .existingTeam-input-label {
+	z-index: 0;
 	font-size: $small-font-size;
 
 	@include desktop() {

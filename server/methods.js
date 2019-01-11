@@ -8,6 +8,7 @@ import moment from "moment";
 import SimpleSchema from "simpl-schema";
 import { CancelAgendaJob, AddAgendaJob } from "./agenda";
 import { setupApi, sendSMS } from "./twilio_server";
+import { Email } from "meteor/email";
 
 const YES = 0;
 const NO = 1;
@@ -675,7 +676,12 @@ Meteor.methods({
 		}
 	},
 	"email.send"(msg, email) {
-		throw new Meteor.Error("Not implemented yet!");
+		var from = "soccerbuddymail@gmail.com";
+		var subject = "this is an email from soccer buddy!";
+
+		this.unblock(); // allows other methods to still be called while this is running
+
+		Email.send({ to: email, from: from, subject: subject, text: msg });
 	}
 });
 

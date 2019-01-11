@@ -8,6 +8,8 @@ import "../imports/startup/simple-schema-configuration";
 
 Meteor.startup(() => {
 	// code to run on server at startup
+	// process.env.MAIL_URL =
+	// 	"smtps://soccerbuddymail:JustForKicks@smtp.gmail.com:465";
 	WebApp.connectHandlers.use((request, response, next) => {
 		//request is the URL we receive. response is the response we send back. next is a function that tells server what to do (continue on normally)
 		// console.log("this is from our custom MW");
