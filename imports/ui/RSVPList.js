@@ -27,6 +27,7 @@ import {
 	ListSubheader,
 	ListItemSecondaryAction,
 	ListItemText,
+	Modal,
 	Switch,
 	Table,
 	TableBody,
@@ -42,6 +43,7 @@ import {
 
 import { Events } from "../api/events";
 import { Teams } from "../api/teams";
+import SuccessMessage from "./SuccessMessage";
 
 const ROWS = [
 	{ id: "name", disablePadding: false, label: "Player" },
@@ -375,7 +377,14 @@ export class RSVPList extends React.Component {
 						name +
 						"! Your coach has requested you RSVP for the ";
 					msg =
-						msg + g.type + " '" + g.title + "' at " + time + " on " + date;
+						msg +
+						g.type +
+						" '" +
+						g.title +
+						"' at " +
+						time +
+						" on " +
+						date;
 					msg = msg + ", located at '" + g.location + "'";
 					msg =
 						msg +
@@ -388,7 +397,8 @@ export class RSVPList extends React.Component {
 						alert(err);
 					}
 					if (res) {
-						console.log("success!");
+						console.log("sms success!");
+						SuccessMessage.triggerMessage();
 						Meteor.call(
 							"requests.insert",
 							res.phoneNumber,
@@ -398,7 +408,7 @@ export class RSVPList extends React.Component {
 									alert(err);
 								}
 								if (res) {
-									console.log(res);
+									console.log("success!");
 								}
 							}
 						);
@@ -413,7 +423,8 @@ export class RSVPList extends React.Component {
 						alert(err);
 					}
 					if (res) {
-						console.log("success!");
+						console.log("email success!");
+						SuccessMessage.triggerMessage();
 					}
 				});
 			}
@@ -565,6 +576,7 @@ export class RSVPList extends React.Component {
 						)}
 						Send Message
 					</Button>
+					<SuccessMessage message="Message successfully sent" />
 				</div>
 			</div>
 		);

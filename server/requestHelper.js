@@ -97,6 +97,40 @@ export async function requestUpdate(phoneNumber, attending) {
 		if (result.res <= 1) {
 			result.err = "Failed to add new attendance.";
 			return result;
+		} else {
+			// should be a success. notify coach
+			var attendString =
+				attending == YES
+					? " is now attending "
+					: attending == NO
+						? " is not attending "
+						: " might attend ";
+			// update text here. attending is just a number. need to contextualize.
+			var msg =
+				"Reservation has been updated: " +
+				user.fName +
+				" " +
+				user.lName +
+				attendString +
+				event.title +
+				" on " +
+				event.date;
+
+			console.log(msg);
+			var sms = true;
+			if (sms) {
+				// send sms
+				Meteor.call("sms.send", msg, phoneNumber, function(err, res) {
+					if (err) {
+						alert(err);
+					}
+					if (res) {
+						console.log("sms success!");
+					}
+				});
+			} else {
+				// send email
+			}
 		}
 	} catch (error) {
 		result.err = error;

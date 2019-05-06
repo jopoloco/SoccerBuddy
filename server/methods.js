@@ -415,17 +415,57 @@ Meteor.methods({
 			}
 		);
 
-		return (
-			ret +
-			Events.update(
-				{ _id },
-				{
-					$push: {
-						rollCall: { user: userId, attending: attending }
-					}
+		ret += Events.update(
+			{ _id },
+			{
+				$push: {
+					rollCall: { user: userId, attending: attending }
 				}
-			)
+			}
 		);
+
+		if (ret > 1) {
+			var user = Meteor.users.findOne({ _id: userId });
+			var event = Events.findOne({ _id: _id });
+			var coach = Meteor.users.findOne({ _id: event.coachId });
+			var attendString =
+				attending == YES
+					? " is now attending "
+					: attending == NO
+						? " is not attending "
+						: " might attend ";
+			// update text here. attending is just a number. need to contextualize.
+			var msg =
+				"Reservation has been updated: " +
+				user.fName +
+				" " +
+				user.lName +
+				attendString +
+				event.title +
+				" on " +
+				event.date;
+
+			console.log(msg);
+			var sms = true;
+			if (sms) {
+				// send sms
+				Meteor.call("sms.send", msg, coach.phoneNumber, function(
+					err,
+					res
+				) {
+					if (err) {
+						alert(err);
+					}
+					if (res) {
+						console.log("sms success!");
+					}
+				});
+			} else {
+				// send email
+			}
+		}
+
+		return ret;
 	},
 	async "events.compile"(searchId) {
 		throw new Meteor.Error("not implement yet");
